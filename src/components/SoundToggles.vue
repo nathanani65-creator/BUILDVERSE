@@ -34,8 +34,17 @@ function toggle(key) {
 </template>
 
 <style scoped>
-.sound-toggles { position: fixed; right: 12px; bottom: 12px; z-index: 150; display: flex; gap: 8px; }
+/* Bottom-LEFT corner: the bottom-right corner is used by host badges (e.g. "Powered by Netlify"). */
+.sound-toggles {
+  position: fixed; z-index: 150; display: flex; gap: 8px;
+  left: calc(12px + env(safe-area-inset-left, 0px));
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+}
 .st { position: relative; width: 50px; height: 50px; font-size: 22px; padding: 0; }
+@media (max-width: 560px) {
+  .sound-toggles { left: 8px; bottom: 8px; gap: 6px; }
+  .st { width: 44px; height: 44px; min-height: 44px; font-size: 19px; }
+}
 .off { filter: grayscale(.4); }
 .slash { position: absolute; left: 8px; right: 8px; top: 50%; height: 4px; background: #d24b43; border: 1px solid var(--ink); transform: rotate(-45deg); }
 </style>
