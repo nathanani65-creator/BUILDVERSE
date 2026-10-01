@@ -33,7 +33,7 @@ const TOOLS = [
   ['Pinia', 'Game state management'],
   ['JavaScript + CSS', 'Game logic, layout and animations'],
   ['localStorage', 'Saving the game in the browser'],
-  ['Web Audio API', 'Sound effects (generated in code, no sound files)'],
+  ['Web Audio API', 'Background music and sound effects (made in code, no sound files)'],
   ['Web Speech API', 'Word pronunciation with the voice of the browser'],
   ['Google Fonts', 'Nunito, Press Start 2P, Sarabun (SIL Open Font License)'],
 ]
@@ -77,7 +77,7 @@ const TOOLS = [
       <h2>Art &amp; sound</h2>
       <ul>
         <li>All pixel art (furniture, words, helper character, coins) is drawn in code in <code>src/data/sprites.js</code>. No outside image files are used.</li>
-        <li>Sound effects are simple tones made with the Web Audio API. No outside sound files are used.</li>
+        <li>The background music (“Block Party”) and the sound effects are made in code with the Web Audio API (<code>src/logic/audio.js</code>). No outside music or sound files are used.</li>
         <li>Word pronunciation uses the voice that comes with your browser or device.</li>
       </ul>
       <h2>AI tools</h2>

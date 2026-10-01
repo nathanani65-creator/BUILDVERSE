@@ -7,7 +7,8 @@ export const SAVE_KEY = 'buildverse.save'
 export const SAVE_VERSION = 1
 
 export function defaultSettings() {
-  return { sound: true, volume: 0.7, thai: true }
+  // sound = sound effects + word voice, music = background music
+  return { sound: true, volume: 0.7, music: true, musicVolume: 0.5, thai: true }
 }
 
 export function newSaveData() {

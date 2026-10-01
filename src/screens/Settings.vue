@@ -6,8 +6,8 @@ function toggle(key) {
   store.setSetting(key, !store.settings[key])
   store.sound('click')
 }
-function setVolume(e) {
-  store.setSetting('volume', Number(e.target.value) / 100)
+function setVolume(key, e) {
+  store.setSetting(key, Number(e.target.value) / 100)
 }
 function reset() {
   store.ask('Reset progress?', 'All coins, furniture, rooms and learned words will be deleted. This cannot be undone.', 'Yes, reset', () => {
@@ -27,16 +27,29 @@ function reset() {
     <section class="panel-light list">
       <div class="set">
         <div>
-          <strong>Sound</strong>
-          <p class="muted">Sound effects and word pronunciation.</p>
+          <strong>🎵 Music</strong>
+          <p class="muted">Happy background music.</p>
+        </div>
+        <button class="btn" :class="store.settings.music ? 'btn-green' : 'btn-red'" role="switch" :aria-checked="store.settings.music" @click="toggle('music')">
+          {{ store.settings.music ? '🎵 ON' : 'OFF' }}
+        </button>
+      </div>
+      <div class="set">
+        <strong>Music volume: {{ Math.round(store.settings.musicVolume * 100) }}%</strong>
+        <input type="range" min="0" max="100" step="5" :value="Math.round(store.settings.musicVolume * 100)" :disabled="!store.settings.music" aria-label="Music volume" @input="setVolume('musicVolume', $event)" />
+      </div>
+      <div class="set">
+        <div>
+          <strong>🔊 Sound effects &amp; voice</strong>
+          <p class="muted">Effects (found word, buy, success…) and word pronunciation.</p>
         </div>
         <button class="btn" :class="store.settings.sound ? 'btn-green' : 'btn-red'" role="switch" :aria-checked="store.settings.sound" @click="toggle('sound')">
           {{ store.settings.sound ? '🔊 ON' : '🔇 OFF' }}
         </button>
       </div>
       <div class="set">
-        <strong>Volume: {{ Math.round(store.settings.volume * 100) }}%</strong>
-        <input type="range" min="0" max="100" step="5" :value="Math.round(store.settings.volume * 100)" :disabled="!store.settings.sound" aria-label="Volume" @input="setVolume" @change="store.sound('click')" />
+        <strong>Effects volume: {{ Math.round(store.settings.volume * 100) }}%</strong>
+        <input type="range" min="0" max="100" step="5" :value="Math.round(store.settings.volume * 100)" :disabled="!store.settings.sound" aria-label="Sound effects volume" @input="setVolume('volume', $event)" @change="store.sound('click')" />
       </div>
       <div class="set">
         <div>

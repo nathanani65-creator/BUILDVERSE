@@ -47,11 +47,12 @@ npm run verify     # run the automatic game checks (674 checks)
 | Furniture, prices, required items, sizes, what can go on what | `src/data/furniture.js` |
 | Pixel art (and how to swap in real PNG images) | `src/data/sprites.js` → `IMAGE_OVERRIDES` |
 | Replay reward, language bonus, time bonus | `ECONOMY` in `src/data/levels.js` |
+| Background music (melody, chords, speed) and sound effects | `src/logic/audio.js` |
 
 Code structure: `src/screens/` (game screens), `src/components/` (word grid, clue card, room view…), `src/logic/` (grid generator, word checking, coins, placement rules, saving, sound), `src/stores/game.js` (Pinia game state).
 
 ## Tools used
-Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (sound effects made in code), Web Speech API (pronunciation), Google Fonts (Nunito, Press Start 2P, Sarabun). All pixel art is drawn in code — no outside image or sound files.
+Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background music and sound effects made in code), Web Speech API (pronunciation), Google Fonts (Nunito, Press Start 2P, Sarabun). All pixel art, music and sound effects are made in code — no outside image, music or sound files. Music and sound effects can be turned on/off separately (🎵 / 🔊 buttons in the bottom-right corner, or Settings).
 
 ## AI tools used
 > Group: keep only what is true, and describe what **you** checked or changed.

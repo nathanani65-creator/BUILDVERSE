@@ -169,7 +169,7 @@ export const useGameStore = defineStore('game', {
       playSound(name)
     },
     say(text) {
-      if (!speak(text)) this.toast(this.settings.sound ? 'Speech is not available on this device.' : 'Turn on sound in Settings to hear words.', 'info')
+      if (!speak(text)) this.toast(this.settings.sound ? 'Speech is not available on this device.' : 'Turn on sound effects (🔊) to hear words.', 'info')
     },
     ask(title, text, yes, onYes) {
       this.confirmBox = { title, text, yes, onYes }

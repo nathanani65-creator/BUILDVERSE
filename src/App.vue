@@ -1,6 +1,8 @@
 <script setup>
 // Screen switcher. The current screen name lives in the game store.
-import { computed } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { unlockAudio } from './logic/audio.js'
+import SoundToggles from './components/SoundToggles.vue'
 import { useGameStore } from './stores/game.js'
 import Celebration from './components/Celebration.vue'
 import Modal from './components/Modal.vue'
@@ -44,6 +46,19 @@ const clouds = [
   { top: '28%', w: 140, h: 36, dur: 150, delay: -120 },
 ]
 
+// Browsers only allow sound after the first click/tap/key press.
+function firstGesture() {
+  unlockAudio()
+}
+onMounted(() => {
+  window.addEventListener('pointerdown', firstGesture)
+  window.addEventListener('keydown', firstGesture)
+})
+onUnmounted(() => {
+  window.removeEventListener('pointerdown', firstGesture)
+  window.removeEventListener('keydown', firstGesture)
+})
+
 function confirmYes() {
   const fn = store.confirmBox?.onYes
   store.confirmBox = null
@@ -79,5 +94,6 @@ function confirmYes() {
     </template>
   </Modal>
 
+  <SoundToggles />
   <Celebration />
 </template>
