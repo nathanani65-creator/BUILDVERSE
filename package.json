@@ -1,0 +1,21 @@
+{
+  "name": "buildverse",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "BUILDVERSE - Find Words, Build Your World. An English vocabulary word-search and home decorating game.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "pinia": "^2.2.6",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.7"
+  }
+}
