@@ -349,6 +349,8 @@ export const LEVELS = [
 
 // Rewards & bonuses (Coins)
 export const ECONOMY = {
+  // Coins for one Hint step in Word Search. 0 = hints are free (helps beginners).
+  hintCost: 0,
   replayReward: 50,
   languageBonusPerQuestion: 5,
   timeBonus: 20,

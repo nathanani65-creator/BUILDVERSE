@@ -29,7 +29,9 @@ Each level has its own goal (e.g. Level 1: *"I can name 5 things in a bedroom. I
 | 5 | Garden | 12 | 14×14 | all 8 directions | 400 |
 
 - **Practice Mode** (default): no timer, free hints. **Challenge Mode**: timer (180–420 s) and +20 coins if you finish in time. When time runs out you can continue in Practice Mode or retry.
-- **Hint**: 1st press shows the word, 2nd press flashes its first letter. Hints are free.
+- **One word at a time**: the card above the grid shows the current word's picture, English clue and letter count (e.g. `_ _ _ (3 letters)`). Tap another word in the list at the top, or in **Show All Clues**, to change it. Finding any other word also counts.
+- **Hint** (free, 0 coins — change `ECONOMY.hintCost` to charge coins): 1st press shows the Thai meaning, 2nd flashes the first letter, 3rd shows the word.
+- After each find, a word card shows the picture, word, Thai meaning, example sentence and 🔊 buttons. Press **Next Word** when ready.
 - **Language Challenge**: 3 questions per level (read & choose, sentence order, position word). +5 coins for each first-try answer. After 2 wrong answers you get an extra hint. After 3 wrong answers you see the explanation, then choose the right answer to continue.
 - **Replay** a cleared level for 50 coins + bonuses, then buy extra decorations.
 

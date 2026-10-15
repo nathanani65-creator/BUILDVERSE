@@ -19,7 +19,7 @@
 > "First, the player reads the clue, for example *'You sleep on this.'*, and looks at the picture. Then they drag from the first letter to the last letter."
 
 *Find BED and one more word. Show the word card: picture, Thai meaning, example sentence, and the 🔊 button.*
-> "When a word is found, the game says it and shows its meaning and an example sentence. If the player is stuck, **Hint** first shows the word and then flashes the first letter."
+> "When a word is found, the game says it and shows its meaning and an example sentence. The game asks for one word at a time. If the player is stuck, **Hint** first shows the Thai meaning, then flashes the first letter, and then shows the word. Hints are free."
 
 *(Optional: show Challenge Mode with the timer and Pause, which hides the grid.)*
 

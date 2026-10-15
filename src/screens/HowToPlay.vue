@@ -75,7 +75,8 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
       <h2>Tips</h2>
       <ul>
         <li><b>Practice Mode</b> has no timer. <b>Challenge Mode</b> has a timer and gives a +20 coin bonus.</li>
-        <li><b>Hint</b> is free: first it shows the word, then the first letter flashes.</li>
+        <li><b>Hint</b> is free (0 coins): 1st the Thai meaning, 2nd the first letter flashes, 3rd the word is shown.</li>
+        <li>The game shows <b>one word at a time</b>. Tap another word at the top (or in <b>Show All Clues</b>) to change it. Any word you find counts!</li>
         <li>Answer a language challenge right on the first try to get +5 coins.</li>
         <li>In <b>My House</b>, drag furniture from the inventory, or tap an item and then tap a square.</li>
         <li>Turn Thai help on or off in <b>Settings</b>.</li>

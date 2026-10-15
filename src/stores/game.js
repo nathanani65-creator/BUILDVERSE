@@ -262,6 +262,15 @@ export const useGameStore = defineStore('game', {
       return r.reward
     },
 
+    /** Spend coins (e.g. for a Hint). Never lets coins go below 0. */
+    spendCoins(amount) {
+      if (!amount) return true
+      if (!Number.isFinite(amount) || amount < 0 || this.data.coins < amount) return false
+      this.data.coins -= amount
+      this.persist()
+      return true
+    },
+
     // ---------------- shop ----------------
     buyState(itemId) {
       return canBuy(itemId, {
