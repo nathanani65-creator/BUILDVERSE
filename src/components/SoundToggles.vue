@@ -2,6 +2,8 @@
 // Two small buttons that are always on screen: music on/off and sound effects on/off.
 import { useGameStore } from '../stores/game.js'
 const store = useGameStore()
+// inline = shown inside a header instead of floating in the corner
+const props = defineProps({ inline: { type: Boolean, default: false } })
 function toggle(key) {
   store.setSetting(key, !store.settings[key])
   if (key === 'sound' && store.settings.sound) store.sound('click')
@@ -9,7 +11,7 @@ function toggle(key) {
 </script>
 
 <template>
-  <div class="sound-toggles" role="group" aria-label="Sound">
+  <div class="sound-toggles" :class="{ inline: props.inline, 'on-ws': store.screen === 'wordsearch' }" role="group" aria-label="Sound">
     <button
       class="btn btn-icon st"
       :class="store.settings.music ? 'btn-green' : 'off'"
@@ -41,9 +43,15 @@ function toggle(key) {
   bottom: calc(12px + env(safe-area-inset-bottom, 0px));
 }
 .st { position: relative; width: 50px; height: 50px; font-size: 22px; padding: 0; }
+.sound-toggles.inline { position: static; z-index: auto; gap: 6px; }
+.inline .st { width: 40px; height: 40px; min-height: 40px; font-size: 17px; }
+/* On phones the word grid needs the whole width, so the Word Search screen
+   shows these buttons in its header instead of floating over the grid. */
+@media (max-width: 760px) { .sound-toggles.on-ws:not(.inline) { display: none; } }
+@media (min-width: 761px) { .sound-toggles.inline { display: none; } }
 @media (max-width: 560px) {
-  .sound-toggles { left: 8px; bottom: 8px; gap: 6px; }
-  .st { width: 44px; height: 44px; min-height: 44px; font-size: 19px; }
+  .sound-toggles:not(.inline) { left: 8px; bottom: 8px; gap: 6px; }
+  .sound-toggles:not(.inline) .st { width: 44px; height: 44px; min-height: 44px; font-size: 19px; }
 }
 .off { filter: grayscale(.4); }
 .slash { position: absolute; left: 8px; right: 8px; top: 50%; height: 4px; background: #d24b43; border: 1px solid var(--ink); transform: rotate(-45deg); }

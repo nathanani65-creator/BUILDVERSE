@@ -7,6 +7,8 @@ import { generateGrid, BACKWARD_DIRS } from '../logic/gridGenerator.js'
 import { checkSelection } from '../logic/selection.js'
 import WordGrid from '../components/WordGrid.vue'
 import ClueCard from '../components/ClueCard.vue'
+import WordStrip from '../components/WordStrip.vue'
+import SoundToggles from '../components/SoundToggles.vue'
 import PixelSprite from '../components/PixelSprite.vue'
 import Modal from '../components/Modal.vue'
 import CoinCounter from '../components/CoinCounter.vue'
@@ -37,6 +39,8 @@ let timer = null
 let flashTimer = null
 
 const foundWords = computed(() => found.value.map((f) => f.word))
+const foundColors = computed(() => Object.fromEntries(found.value.map((f) => [f.word, f.color])))
+const nextUnfound = () => words.find((w) => !foundWords.value.includes(w)) || null
 const firstTime = !store.roomState(roomId).wordSearch
 const timeText = computed(() => `${Math.floor(timeLeft.value / 60)}:${String(timeLeft.value % 60).padStart(2, '0')}`)
 const hasBackward = level.directions.some((d) => BACKWARD_DIRS.includes(d))
@@ -75,6 +79,7 @@ function start(selectedMode) {
   if (!store.data.tutorials['ws-' + roomId]) store.markTutorial('ws-' + roomId)
   showTutorial.value = false
   phase.value = 'playing'
+  active.value = nextUnfound()
   message.value = { kind: 'info', text: `Find ${words.length} words. Drag from the first letter to the last letter.` }
   startTimer()
   store.sound('click')
@@ -103,7 +108,7 @@ function onSelect(cells) {
     const w = level.words.find((x) => x.word === res.word)
     found.value.push({ word: res.word, cells, color: COLORS[found.value.length % COLORS.length] })
     lastFound.value = w
-    active.value = null
+    active.value = nextUnfound()
     flash.value = null
     message.value = { kind: 'good', text: `Great! You found ${w.display}. (${w.clue})` }
     store.sound('found')
@@ -196,7 +201,8 @@ onUnmounted(() => {
       <div v-if="mode === 'challenge' && phase !== 'intro'" class="timer" :class="{ low: timeLeft <= 30 }" aria-live="off">⏱ {{ timeText }}</div>
       <div v-else-if="phase !== 'intro'" class="mode-tag">Practice Mode</div>
       <span class="spacer" />
-      <CoinCounter :coins="store.data.coins" />
+      <CoinCounter class="coins-w" :coins="store.data.coins" />
+      <SoundToggles inline />
       <button class="btn btn-small btn-gold" :disabled="phase !== 'playing'" @click="hint()">💡 Hint</button>
       <button class="btn btn-small btn-blue" :disabled="phase !== 'playing'" @click="pause">⏸ Pause</button>
     </header>
@@ -205,6 +211,18 @@ onUnmounted(() => {
 
     <div class="layout">
       <section class="grid-area">
+        <WordStrip
+          v-if="phase !== 'intro'"
+          :words="level.words"
+          :clue-style="level.clueStyle"
+          :found="foundColors"
+          :revealed="hints"
+          :active="active || ''"
+          :width="cell * level.gridSize + 8"
+          :thai="store.settings.thai"
+          @select="(w) => (active = w)"
+          @hint="hint"
+        />
         <div class="grid-holder">
           <WordGrid
             v-if="grid.length && phase !== 'paused'"
@@ -403,5 +421,16 @@ onUnmounted(() => {
   .layout { flex-direction: column; align-items: stretch; }
   .clue-list { max-height: none; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 }
-@media (max-width: 560px) { .modes { grid-template-columns: 1fr; } }
+@media (max-width: 560px) {
+  .modes { grid-template-columns: 1fr; }
+  /* compact header on phones so the grid is visible without scrolling */
+  .ws-head { gap: 6px; padding: 6px 8px; }
+  .ws-head .title { font-size: 16px; }
+  .thai-l, .coins-w, .lvl { display: none; }
+  .count { padding: 4px 6px; font-size: 14px; }
+  .timer { font-size: 12px; padding: 6px; }
+  .mode-tag { font-size: 13px; padding: 4px 6px; }
+  .goal { margin: 8px 0; padding: 6px 8px; font-size: 14px; }
+  .dirs { margin-left: 0; font-size: 13px; }
+}
 </style>
