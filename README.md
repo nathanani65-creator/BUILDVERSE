@@ -2,7 +2,7 @@
 
 > 🎯 **Language focus:** BUILDVERSE teaches **vocabulary for things in the home** and the **prepositions of place _on, under, next to, between_**, for **lower-secondary students (Grade 7–9 / ม.ต้น) and adult beginners at CEFR A1–A2**.
 
-**BUILDVERSE** is a web game for learning English. The player moves into an empty block-style house, finds hidden words, answers language challenges, earns coins, buys furniture and decorates five rooms by **following English instructions** such as *"Put the rug under the table."*
+**BUILDVERSE** is a web game for learning English. In each round the player **finds hidden words**, then **reads an English instruction** such as *"Put the rug under the table."* and drags the item to the right place. Rounds give coins to decorate the player's own house. Five rooms open one by one, and every room can be replayed with new words.
 
 ## Target learners
 Lower-secondary students (Grade 7–9) and adult beginners, **CEFR A1–A2**. Screens, buttons, instructions and feedback are in English. **Thai help** can be turned on or off.
@@ -10,30 +10,29 @@ Lower-secondary students (Grade 7–9) and adult beginners, **CEFR A1–A2**. Sc
 ## Language goals — what the game teaches
 | Skill | What the player learns | Where in the game |
 |---|---|---|
-| 📦 **Home vocabulary** (main focus) | 43 words in 5 rooms: bed, sofa, fridge, towel, fountain… | Word Search, clue cards, Review Words |
-| 📍 **Prepositions of place** (main focus) | *on, under, next to, between* — say and understand where things are | Picture questions, decorating quests |
-| 📖 **Reading & following instructions** | Understand clues ("You boil water in this.") and do instructions ("Put the mirror next to the shower.") | Clue cards, "Read and choose", decorating |
-| 🧩 **Building simple sentences** | Word order in simple present sentences: *The lamp is on the desk.* | "Make a sentence" questions |
+| 📦 **Home vocabulary** (main focus) | 75 words, 15 per room: bed, sofa, fridge, towel, fountain… | 1. Find Words, Review Words |
+| 📍 **Prepositions of place** (main focus) | *on, under, next to, between* — understand where things go | 2. Place Items |
+| 📖 **Reading & following instructions** | Understand clues ("You boil water in this.") and do instructions ("Put the mirror next to the shower.") | Clues and instructions |
 
-Each level has its own goal (e.g. Level 1: *"I can name 5 things in a bedroom. I can use 'on'."*), shown before the level starts and again on the Quest Complete screen. The in-game **🎯 Learning Goals** screen explains everything. Full list: `src/data/learning.js`.
+Position word per room: Bedroom **on** · Living Room **under** · Kitchen **next to** · Bathroom **on & next to** · Garden **between**. The in-game **🎯 Learning Goals** screen explains everything (`src/data/learning.js`).
 
 ## How to play / Core loop
-**Choose a room → read the clues → find the words → do 3 language challenges → get coins → buy furniture → place it by following the instruction → unlock the next room**
+**Choose a room → 1. Find Words → 2. Place Items → 3. Rewards → play again, choose another room, or decorate My House**
 
-| Level | Room | Words | Grid | Directions | First-clear reward |
-|---|---|---|---|---|---|
-| 1 | Bedroom | 5 | 8×8 | → ↓ | 200 |
-| 2 | Living Room | 7 | 10×10 | + diagonals ↘ ↗ | 250 |
-| 3 | Kitchen | 9 | 12×12 | + backwards ← ↑ | 300 |
-| 4 | Bathroom | 10 | 12×12 | all 8 directions | 350 |
-| 5 | Garden | 12 | 14×14 | all 8 directions | 400 |
+| Level | Words | Grid | Directions | Pictures | Instructions | Coins |
+|---|---|---|---|---|---|---|
+| Easy | 5 | 8×8 | → ↓ | shown | 1 | 50 |
+| Normal | 7 | 10×10 | + diagonal ↘ ↗ | "Show picture" button | 2 | 70 |
+| Hard | 9 | 12×12 | + backwards ← ↑ ↖ ↙ | "Show picture" button, English clues first | 3 | 100 |
 
-- **Practice Mode** (default): no timer, free hints. **Challenge Mode**: timer (180–420 s) and +20 coins if you finish in time. When time runs out you can continue in Practice Mode or retry.
-- **One word at a time**: the card above the grid shows the current word's picture, English clue and letter count (e.g. `_ _ _ (3 letters)`). Tap another word in the list at the top, or in **Show All Clues**, to change it. Finding any other word also counts.
-- **Hint** (free, 0 coins — change `ECONOMY.hintCost` to charge coins): 1st press shows the Thai meaning, 2nd flashes the first letter, 3rd shows the word.
-- After each find, a word card shows the picture, word, Thai meaning, example sentence and 🔊 buttons. Press **Next Word** when ready.
-- **Language Challenge**: 3 questions per level (read & choose, sentence order, position word). +5 coins for each first-try answer. After 2 wrong answers you get an extra hint. After 3 wrong answers you see the explanation, then choose the right answer to continue.
-- **Replay** a cleared level for 50 coins + bonuses, then buy extra decorations.
+- **Rooms:** Bedroom → Living Room → Kitchen → Bathroom → Garden. Only the Bedroom is open at the start. Clearing a room once (both activities) opens the next room and pays a **+100** bonus (once per room). Open rooms can be replayed any time and never lock again.
+- **First time in a room = Easy.** After clearing it you can choose Easy, Normal or Hard.
+- **Timer is a separate choice:** Practice (no timer) or Challenge (timer for the words; finish in time for **+20**). When time runs out: continue in Practice or retry.
+- **New every round:** random words from the room's 15-word bank (never the same list twice in a row), new grid positions and letters, and random instructions.
+- **Find Words:** one word at a time — picture, English clue and letter count (e.g. `_ _ _ (3 letters)`). Tap another word to change it; any word you find counts. **Hints are free**: Thai meaning → first letter flashes → the word.
+- **Place Items:** a practice scene with all things provided free. Drag the item to a dashed space (it snaps), or tap the item and then a space. Press **Check Placement**. Wrong: *Why* + a free hint; after 2 tries the right space glows. The instructions use words from the same Word Search.
+- **My House** is separate: decorate it freely with furniture bought in the **Shop**. Quests never change it. Nothing in the Shop is needed to play.
+- **After all 5 rooms:** a congratulations message, then **Play Again**, **Choose Room**, **Decorate My House**, and **🎲 Random Room**.
 
 ## Install, run and build
 You need [Node.js](https://nodejs.org) 18 or newer.
@@ -43,7 +42,7 @@ npm install        # install once
 npm run dev        # play at http://localhost:5173
 npm run build      # make the website in the dist/ folder
 npm run preview    # test the built website
-npm run verify     # run the automatic game checks (691 checks)
+npm run verify     # run the automatic game checks (1,205 checks)
 ```
 
 ## Where to change content
@@ -51,13 +50,15 @@ npm run verify     # run the automatic game checks (691 checks)
 |---|---|
 | Learning goals, target learners, can-do statements | `src/data/learning.js` |
 | AI use & group work shown in the game (Credits) | `src/data/credits.js` |
-| Words, clues, Thai meanings, example sentences, grid size, directions, rewards, timers, language challenges, placement rules | `src/data/levels.js` |
-| Furniture, prices, required items, sizes, what can go on what | `src/data/furniture.js` |
+| Word banks (words, clues, Thai, example sentences) | `LEVELS` in `src/data/levels.js` |
+| Easy / Normal / Hard (words, grid, directions, coins, timer, number of instructions) | `DIFFICULTY` in `src/data/levels.js` |
+| Decorating instructions and the things in the scenes | `QUESTS` and `QUEST_THINGS` in `src/data/levels.js` |
+| Shop furniture for My House: prices, sizes, what can go on what | `src/data/furniture.js` |
 | Pixel art (and how to swap in real PNG images) | `src/data/sprites.js` → `IMAGE_OVERRIDES` |
-| Replay reward, language bonus, time bonus | `ECONOMY` in `src/data/levels.js` |
+| Time bonus, first-clear bonus, hint cost | `ECONOMY` in `src/data/levels.js` |
 | Background music (melody, chords, speed) and sound effects | `src/logic/audio.js` |
 
-Code structure: `src/screens/` (game screens), `src/components/` (word grid, clue card, room view…), `src/logic/` (grid generator, word checking, coins, placement rules, saving, sound), `src/stores/game.js` (Pinia game state).
+Code structure: `src/screens/` (game screens), `src/components/` (word grid, clue card, room view…), `src/logic/` (round builder, grid generator, word checking, quest scenes, coins, My House placement, saving, sound), `src/stores/game.js` (Pinia game state).
 
 ## Tools used
 Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background music and sound effects made in code), Web Speech API (pronunciation), Google Fonts (Nunito, Press Start 2P, Sarabun). All pixel art, music and sound effects are made in code — no outside image, music or sound files. Music and sound effects can be turned on/off separately (🎵 / 🔊 buttons in the bottom-left corner, or Settings).
@@ -67,7 +68,7 @@ Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background mus
 
 | AI tool | What it helped with | What the group checked / did itself |
 |---|---|---|
-| Claude Code (Anthropic) | First version of the game code, level text (clues, example sentences, challenges) and these documents | _(fill in)_ |
+| Claude Code (Anthropic) | Game code, word banks (clues, example sentences), decorating instructions, pixel art and music in code, and these documents | _(fill in)_ |
 | _(add any other AI tool you really used)_ | | |
 
 No AI is called while the game is running. The same table is shown in the game: **Credits → How we used AI** (edit `src/data/credits.js`).

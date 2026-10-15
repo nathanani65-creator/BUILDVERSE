@@ -21,9 +21,9 @@ export const SKILLS = [
     icon: '📦',
     name: 'Home Vocabulary',
     thai: 'คำศัพท์สิ่งของในบ้าน',
-    desc: '43 words for things in 5 rooms: bedroom, living room, kitchen, bathroom and garden.',
+    desc: '75 words for things in 5 rooms (15 per room): bedroom, living room, kitchen, bathroom and garden. Each round picks new words.',
     example: 'bed, sofa, fridge, towel, fountain',
-    where: 'Word Search · Clue cards · Review Words',
+    where: 'Find Words (Word Search) · Review Words',
   },
   {
     id: 'position',
@@ -32,7 +32,7 @@ export const SKILLS = [
     thai: 'คำบอกตำแหน่ง',
     desc: 'Say and understand where things are: on, under, next to, between.',
     example: 'The lamp is on the desk.',
-    where: 'Language Challenge (picture questions) · Decorating quests',
+    where: 'Place Items (Decorating Quest)',
   },
   {
     id: 'reading',
@@ -41,16 +41,7 @@ export const SKILLS = [
     thai: 'อ่านเข้าใจและทำตามคำสั่ง',
     desc: 'Read short English clues and instructions, then act on them.',
     example: '"You boil water in this." → KETTLE  ·  "Put the rug under the table."',
-    where: 'Clue cards · "Read and choose" questions · Decorating quests',
-  },
-  {
-    id: 'sentence',
-    icon: '🧩',
-    name: 'Building Simple Sentences',
-    thai: 'เรียงคำเป็นประโยค',
-    desc: 'Put words in the right order to make simple present sentences.',
-    example: 'The / lamp / is / on / the / desk.',
-    where: 'Language Challenge ("Make a sentence")',
+    where: 'Word Search clues · Decorating Quest instructions',
   },
 ]
 
@@ -58,37 +49,37 @@ export const SKILLS = [
 export const LEVEL_GOALS = {
   bedroom: {
     position: 'on',
-    pattern: 'The ___ is on the ___.',
-    canDo: ['I can name 5 things in a bedroom.', 'I can use "on" to say where something is.', 'I can follow the instruction "Put the lamp on the desk."'],
+    pattern: 'Put the ___ on the ___.',
+    canDo: ['I can name things in a bedroom.', 'I can use "on" to say where something is.', 'I can follow the instruction "Put the lamp on the desk."'],
   },
   living: {
     position: 'under',
-    pattern: 'The ___ is under the ___.',
-    canDo: ['I can name 7 things in a living room.', 'I can use "under" to say where something is.', 'I can read clues about how we use things.'],
+    pattern: 'Put the ___ under the ___.',
+    canDo: ['I can name things in a living room.', 'I can use "under" to say where something is.', 'I can read clues about how we use things.'],
   },
   kitchen: {
     position: 'next to',
-    pattern: 'The ___ is next to the ___.',
-    canDo: ['I can name 9 things in a kitchen.', 'I can use "next to" to say where something is.', 'I can find words written backwards.'],
+    pattern: 'Put the ___ next to the ___.',
+    canDo: ['I can name things in a kitchen.', 'I can use "next to" to say where something is.', 'I can find words in longer word lists.'],
   },
   bathroom: {
-    position: 'between',
-    pattern: 'The ___ is between the ___ and the ___.',
-    canDo: ['I can name 10 things in a bathroom.', 'I can use "between" and "next to".', 'I can understand English clues without pictures.'],
+    position: 'on · next to',
+    pattern: 'Put the ___ on / next to the ___.',
+    canDo: ['I can name things in a bathroom.', 'I can choose between "on" and "next to".', 'I can understand English clues without pictures.'],
   },
   garden: {
     position: 'between',
-    pattern: 'The ___ is between the ___ and the ___.',
-    canDo: ['I can name 12 things in a garden.', 'I can follow a two-part position instruction.', 'I can use all four position words: on, under, next to, between.'],
+    pattern: 'Put the ___ between the ___ and the ___.',
+    canDo: ['I can name things in a garden.', 'I can use "between" with two things.', 'I can use all four position words: on, under, next to, between.'],
   },
 }
 
 // How each part of the game helps learning (shown on the Learning Goals screen).
 export const LEARNING_DESIGN = [
-  { part: 'Clue cards', how: 'Picture + English clue → the player connects the word with its meaning (not just its spelling).' },
-  { part: 'Word Search', how: 'Finding and dragging the letters practises reading and spelling. Each found word shows its meaning, an example sentence and its sound.' },
-  { part: 'Language Challenge', how: 'Uses the new words in context: read a sentence and choose, put words in order, choose a position word from a picture.' },
-  { part: 'Decorating quest', how: 'The player must understand an English instruction (e.g. "Put the mirror next to the shower.") and do it — meaningful practice, not a quiz.' },
-  { part: 'Feedback', how: 'Every answer says correct or not, and WHY, with a hint. After 3 tries the game explains the answer.' },
-  { part: 'Coins & rooms', how: 'Rewards and new rooms keep the player practising. Replaying gives more coins and more practice.' },
+  { part: '1. Find Words', how: 'Picture + English clue → the player connects each word with its meaning, then finds and drags it in the grid (reading and spelling). Each found word shows its Thai meaning, an example sentence and its sound.' },
+  { part: '2. Place Items', how: 'The player reads an English instruction (e.g. "Put the mirror next to the shower.") and drags the item to the right place — meaningful practice of position words, not a quiz.' },
+  { part: 'Connected', how: 'The instructions use words from the same Word Search, so the player meets each word twice in one round.' },
+  { part: 'Feedback', how: 'Every answer says correct or not, and WHY (the meaning of the position word) with a hint. Hints never cost coins.' },
+  { part: 'Replay', how: 'Every round picks new words and new instructions. Easy → Normal → Hard adds more words, bigger grids, diagonal and backwards words, and more instructions.' },
+  { part: '3. Rewards', how: 'Coins (50 / 70 / 100 by difficulty) buy decorations for My House, so players want to keep practising.' },
 ]

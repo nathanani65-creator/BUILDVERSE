@@ -28,7 +28,7 @@ const positions = ['on', 'under', 'next to', 'between']
     </section>
 
     <!-- 2. The four skills -->
-    <h2 class="sec-title">4 English skills you practise</h2>
+    <h2 class="sec-title">{{ SKILLS.length }} English skills you practise</h2>
     <div class="skills">
       <article v-for="(s, i) in SKILLS" :key="s.id" class="skill panel-light" :class="{ main: i < 2 }">
         <div class="s-head">
@@ -60,7 +60,7 @@ const positions = ['on', 'under', 'next to', 'between']
     <div class="table-wrap panel-light">
       <table class="simple">
         <thead>
-          <tr><th>Level</th><th>Words</th><th>Position word</th><th>Sentence pattern</th><th>After this level…</th></tr>
+          <tr><th>Room</th><th>Word bank (15 words)</th><th>Position word</th><th>Sentence pattern</th><th>After this level…</th></tr>
         </thead>
         <tbody>
           <tr v-for="l in LEVELS" :key="l.id">

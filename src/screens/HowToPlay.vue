@@ -1,17 +1,18 @@
 <script setup>
 import { useGameStore } from '../stores/game.js'
+import { DIFFICULTY, ECONOMY } from '../data/levels.js'
 import PixelSprite from '../components/PixelSprite.vue'
-import SceneView from '../components/SceneView.vue'
 
 const store = useGameStore()
 const STEPS = [
-  { en: 'Read the clue.', th: 'อ่านคำใบ้' },
-  { en: 'Find the hidden word.', th: 'หาคำที่ซ่อนอยู่' },
+  { en: 'Choose a room and a level: Easy, Normal or Hard.', th: 'เลือกห้องและระดับความยาก' },
+  { en: 'Read the clue and look at the picture.', th: 'อ่านคำใบ้และดูภาพ' },
   { en: 'Drag from the first letter to the last letter.', th: 'ลากจากตัวอักษรแรกไปตัวสุดท้าย' },
-  { en: 'Complete language challenges.', th: 'ทำภารกิจภาษาให้สำเร็จ' },
-  { en: 'Earn coins and buy furniture.', th: 'รับเหรียญแล้วซื้อเฟอร์นิเจอร์' },
-  { en: 'Follow the instructions to decorate your room.', th: 'ทำตามคำสั่งเพื่อตกแต่งห้อง' },
-  { en: 'Unlock all five rooms!', th: 'ปลดล็อกห้องทั้งห้าห้อง!' },
+  { en: 'Read the instruction.', th: 'อ่านคำสั่งภาษาอังกฤษ' },
+  { en: 'Drag the item to a dashed space. Press Check Placement.', th: 'ลากของไปวางในช่องเส้นประ แล้วกดตรวจ' },
+  { en: 'Get coins!', th: 'รับเหรียญ' },
+  { en: 'Buy furniture and decorate My House.', th: 'ซื้อเฟอร์นิเจอร์ แต่งบ้านของคุณ' },
+  { en: 'Clear a room to open the next one. Play again any time!', th: 'ผ่านห้องเพื่อเปิดห้องถัดไป เล่นซ้ำได้เสมอ' },
 ]
 const mini = ['XBEDQ', 'LAMPO', 'WALLS', 'DOORE', 'TDESK']
 const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
@@ -28,40 +29,39 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
       🎯 <b>What you learn:</b> words for things in the home + position words <b>on, under, next to, between</b>. <u>See Learning Goals ▶</u>
     </button>
 
+    <div class="round paper">
+      <b>One round =</b>
+      <span class="r-step">1. Find Words</span> → <span class="r-step">2. Place Items</span> → <span class="r-step">3. Rewards</span>
+    </div>
+
     <div class="steps">
       <article v-for="(s, i) in STEPS" :key="i" class="step panel-light">
         <div class="num">{{ i + 1 }}</div>
         <div class="art">
-          <!-- 1 clue card -->
-          <div v-if="i === 0" class="clue-demo paper"><PixelSprite name="bed" :size="56" /><div><b>_ _ _</b><br />You sleep on this.</div></div>
-          <!-- 2 grid with hidden word -->
-          <div v-else-if="i === 1" class="mini-grid">
-            <template v-for="(row, y) in mini" :key="y">
-              <span v-for="(ch, x) in row" :key="x" :class="{ glow: y === 0 && x >= 1 && x <= 3 }">{{ ch }}</span>
-            </template>
+          <div v-if="i === 0" class="levels">
+            <span class="lv e">Easy</span><span class="lv n">Normal</span><span class="lv h">Hard</span>
           </div>
-          <!-- 3 drag -->
+          <div v-else-if="i === 1" class="clue-demo paper"><PixelSprite name="bed" :size="56" /><div><small>You sleep on this.</small><br /><b>_ _ _</b> <small>(3 letters)</small></div></div>
           <div v-else-if="i === 2" class="drag-demo">
             <div class="letters"><span>L</span><span>A</span><span>M</span><span>P</span></div>
             <div class="sweep" />
             <div class="hand">👆</div>
           </div>
-          <!-- 4 challenge -->
-          <div v-else-if="i === 3" class="chips">
-            <span class="chip">The</span><span class="chip">lamp</span><span class="chip">is</span><span class="chip on">on</span><span class="chip">the</span><span class="chip">desk.</span>
-            <span class="tick">✔</span>
+          <div v-else-if="i === 3" class="instr paper">“Put the lamp <b>on</b> the desk.”</div>
+          <div v-else-if="i === 4" class="place-demo">
+            <div class="d-prop"><PixelSprite name="desk" size="100%" /></div>
+            <div class="d-slot" />
+            <div class="d-item"><PixelSprite name="lamp" size="100%" /></div>
           </div>
-          <!-- 5 coins + shop -->
-          <div v-else-if="i === 4" class="shop-demo">
+          <div v-else-if="i === 5" class="coins">
             <PixelSprite name="coin" :size="44" class="spin" />
+            <span>{{ DIFFICULTY.easy.reward }} · {{ DIFFICULTY.normal.reward }} · {{ DIFFICULTY.hard.reward }}</span>
+          </div>
+          <div v-else-if="i === 6" class="shop-demo">
+            <PixelSprite name="coin" :size="36" />
             <span class="arrow">➜</span>
             <PixelSprite name="sofa" :size="56" />
           </div>
-          <!-- 6 decorate -->
-          <div v-else-if="i === 5" class="decor-demo">
-            <SceneView scene="lampOnDesk" :width="180" />
-          </div>
-          <!-- 7 rooms -->
           <div v-else class="rooms-demo">
             <span v-for="(r, k) in rooms" :key="r" class="rm" :style="{ animationDelay: k * 0.4 + 's' }"><PixelSprite :name="r" :size="34" /></span>
           </div>
@@ -74,12 +74,13 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
     <section class="panel tips">
       <h2>Tips</h2>
       <ul>
-        <li><b>Practice Mode</b> has no timer. <b>Challenge Mode</b> has a timer and gives a +20 coin bonus.</li>
-        <li><b>Hint</b> is free (0 coins): 1st the Thai meaning, 2nd the first letter flashes, 3rd the word is shown.</li>
-        <li>The game shows <b>one word at a time</b>. Tap another word at the top (or in <b>Show All Clues</b>) to change it. Any word you find counts!</li>
-        <li>Answer a language challenge right on the first try to get +5 coins.</li>
-        <li>In <b>My House</b>, drag furniture from the inventory, or tap an item and then tap a square.</li>
-        <li>Turn Thai help on or off in <b>Settings</b>.</li>
+        <li><b>Easy</b>: 5 words, pictures shown, words go → ↓, 1 instruction. <b>Normal</b>: 7 words, diagonal words, 2 instructions. <b>Hard</b>: 9 words, backwards words, 3 instructions.</li>
+        <li>The first time in a room is always <b>Easy</b>. After you clear it, you can choose Normal or Hard.</li>
+        <li><b>Practice</b> has no timer. <b>Challenge</b> has a timer: find all words in time for <b>+{{ ECONOMY.timeBonus }}</b> coins.</li>
+        <li>Clear a room for the first time: <b>+{{ ECONOMY.unlockBonus }}</b> bonus coins and the next room opens.</li>
+        <li><b>Hints are free</b>: Thai meaning → first letter flashes → the word is shown.</li>
+        <li>Wrong placement? Read the instruction again and try — you never lose coins.</li>
+        <li>The Decorating Quest is practice only. Your <b>My House</b> never changes when you play.</li>
       </ul>
       <div class="row">
         <button class="btn btn-green btn-big" @click="store.go(store.hasSave ? 'map' : 'menu')">{{ store.hasSave ? "▶ Let's play!" : '◀ Back to Menu' }}</button>
@@ -89,18 +90,21 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
 </template>
 
 <style scoped>
-.learn { display: block; width: 100%; text-align: left; font: inherit; font-size: 18px; color: var(--ink); cursor: pointer; margin-bottom: 16px; }
-.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.learn { display: block; width: 100%; text-align: left; font: inherit; font-size: 18px; color: var(--ink); cursor: pointer; margin-bottom: 12px; }
+.round { color: var(--ink); font-size: 18px; margin-bottom: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.r-step { font-weight: 900; background: var(--gold); border: 2px solid var(--ink); padding: 2px 8px; }
+.steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .step { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
 .num { position: absolute; left: -8px; top: -10px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-size: 14px; background: var(--gold); border: 3px solid var(--ink); }
-.art { height: 140px; display: flex; align-items: center; justify-content: center; }
-.en { font-size: 19px; font-weight: 900; margin: 0; }
+.art { height: 130px; display: flex; align-items: center; justify-content: center; }
+.en { font-size: 18px; font-weight: 900; margin: 0; }
 .thai { margin: 0; }
+.levels { display: flex; gap: 6px; }
+.lv { font-weight: 900; color: #fff; padding: 6px 10px; border: 2px solid var(--ink); }
+.lv.e { background: #2b6e2c; }
+.lv.n { background: #20568c; }
+.lv.h { background: #8b2a24; }
 .clue-demo { display: flex; gap: 8px; align-items: center; text-align: left; }
-.mini-grid { display: grid; grid-template-columns: repeat(5, 26px); background: var(--paper); border: 3px solid var(--ink); }
-.mini-grid span { height: 26px; display: flex; align-items: center; justify-content: center; font-weight: 900; }
-.mini-grid .glow { animation: glow 1.6s infinite; }
-@keyframes glow { 0%, 40% { background: transparent; } 60%, 100% { background: #f6d548; } }
 .drag-demo { position: relative; width: 180px; height: 60px; }
 .letters { position: absolute; inset: 0; display: flex; background: var(--paper); border: 3px solid var(--ink); z-index: 2; }
 .letters span { flex: 1; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 24px; }
@@ -108,12 +112,15 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
 .hand { position: absolute; top: 34px; left: 10px; font-size: 30px; z-index: 4; animation: hand 2.2s ease-in-out infinite; }
 @keyframes grow { 0%, 10% { width: 30px; } 70%, 100% { width: 168px; } }
 @keyframes hand { 0%, 10% { left: 10px; } 70%, 100% { left: 140px; } }
-.chips { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; max-width: 230px; align-items: center; }
-.chip { background: #ffe9a8; border: 2px solid var(--ink); padding: 3px 7px; font-weight: 800; }
-.chip.on { animation: pulse 1.2s infinite; background: #c9ecff; }
-.tick { color: var(--good); font-size: 26px; font-weight: 900; }
-.shop-demo { display: flex; align-items: center; gap: 10px; }
+.instr { font-size: 18px; font-weight: 800; color: var(--ink); }
+.place-demo { position: relative; width: 200px; height: 120px; background: #b9d7f0; border: 3px solid var(--ink); border-bottom: 14px solid #d4a46a; }
+.d-prop { position: absolute; left: 20px; bottom: 0; width: 70px; height: 70px; }
+.d-slot { position: absolute; left: 33px; bottom: 56px; width: 44px; height: 44px; border: 3px dashed #b5651d; border-radius: 6px; }
+.d-item { position: absolute; width: 40px; height: 40px; animation: demoDrag 2.6s ease-in-out infinite; }
+@keyframes demoDrag { 0%, 15% { left: 145px; bottom: 4px; } 65%, 100% { left: 35px; bottom: 58px; } }
+.coins { display: flex; flex-direction: column; align-items: center; gap: 6px; font-weight: 900; font-size: 18px; }
 .spin { animation: bob 1s infinite; }
+.shop-demo { display: flex; align-items: center; gap: 10px; }
 .arrow { font-size: 28px; }
 .rooms-demo { display: flex; gap: 6px; }
 .rm { padding: 4px; background: #555; border: 2px solid var(--ink); animation: unlock 2.4s infinite; }

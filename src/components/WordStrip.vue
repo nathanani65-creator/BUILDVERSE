@@ -11,6 +11,7 @@ const props = defineProps({
   found: { type: Object, required: true }, // { WORD: colour }
   hints: { type: Object, required: true }, // { WORD: hint step }
   target: { type: String, default: '' },
+  pictures: { type: Object, default: () => ({}) }, // { WORD: true } = picture may be shown
 })
 const emit = defineEmits(['select', 'view'])
 
@@ -39,7 +40,8 @@ function click(w) {
       :aria-label="found[w.word] ? `${w.display}, found` : `Word ${i + 1}, ${w.word.length} letters, not found yet${target === w.word ? ', current word' : ''}`"
       @click="click(w)"
     >
-      <PixelSprite :name="w.sprite" :size="22" class="pic" />
+      <PixelSprite v-if="pictures[w.word] !== false" :name="w.sprite" :size="22" class="pic" />
+      <span v-else class="pic q" aria-hidden="true">?</span>
       <span class="t">{{ label(w) }}</span>
     </button>
   </div>
@@ -54,6 +56,7 @@ function click(w) {
   cursor: pointer; transition: background .2s, color .2s, transform .1s;
 }
 .chip .pic { filter: grayscale(1) opacity(.65); }
+.chip .q { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-title); font-size: 10px; background: #bdbdbd; color: #fff; }
 .chip:hover { transform: translateY(-1px); }
 .chip.target { background: #fff7d6; color: #3a2a12; border: 3px solid var(--ink); box-shadow: 0 0 0 3px var(--gold); }
 .chip.target .pic { filter: none; }

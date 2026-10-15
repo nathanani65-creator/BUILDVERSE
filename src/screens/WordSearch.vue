@@ -1,13 +1,13 @@
 <script setup>
-// WORD SEARCH — one target word at a time.
+// WORD SEARCH (round step 1: Find Words) — one target word at a time.
+// The words come from the current round (random each round, see logic/round.js).
 //   Top: list of all words (gray blanks → "SOFA ✓")
 //   Prompt card: picture + English clue + letter count + Hint (Thai → first letter → word)
 //   After a find: word card (picture, word, Thai, example, sound) + "Next Word"
 //   Bottom: "Show All Clues" (collapsed at the start)
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useGameStore } from '../stores/game.js'
-import { LEVEL_BY_ID, LEVELS, ECONOMY } from '../data/levels.js'
-import { LEVEL_GOALS } from '../data/learning.js'
+import { LEVEL_BY_ID, DIFFICULTY, ECONOMY } from '../data/levels.js'
 import { generateGrid } from '../logic/gridGenerator.js'
 import { checkSelection } from '../logic/selection.js'
 import WordGrid from '../components/WordGrid.vue'
@@ -17,22 +17,29 @@ import SoundToggles from '../components/SoundToggles.vue'
 import PixelSprite from '../components/PixelSprite.vue'
 import Modal from '../components/Modal.vue'
 import CoinCounter from '../components/CoinCounter.vue'
+import RoundSteps from '../components/RoundSteps.vue'
 
 const store = useGameStore()
-const roomId = store.params.room || 'bedroom'
+const round = store.data.round
+const roomId = round?.roomId || 'bedroom'
 const level = LEVEL_BY_ID[roomId]
-if (!store.isUnlocked(roomId)) store.go('map')
+// Only play a round that is open; otherwise go to the right place.
+const valid = !!round && !round.claimed && store.isUnlocked(roomId)
+if (!valid) store.go('map')
+else if (round.wsDone) store.go(round.questDone ? 'reward' : 'quest')
+const diff = DIFFICULTY[round?.difficulty] || DIFFICULTY.easy
 
 const COLORS = ['#5fb340', '#4a9fe0', '#f28c28', '#d9463e', '#9a5ac2', '#26a69a', '#e3a92b', '#f29cc4']
 const ARROWS = { E: '→', S: '↓', SE: '↘', NE: '↗', W: '←', N: '↑', NW: '↖', SW: '↙' }
 const HINT_COST = ECONOMY.hintCost
-const words = level.words.map((w) => w.word)
+const words = valid ? [...round.words] : []
 const byWord = Object.fromEntries(level.words.map((w) => [w.word, w]))
-const goals = LEVEL_GOALS[roomId]
-const nextLevel = LEVELS[level.level] || null
+const roundWords = words.map((x) => byWord[x])
+// First-time demo for each kind of grid
+const TUTORIAL = { easy: 'ws-basic', normal: 'ws-diagonal', hard: 'ws-backwards' }[diff.key]
 
 const phase = ref('intro') // intro | playing | paused | timeup | done
-const mode = ref('practice')
+const mode = ref(round?.mode || 'practice')
 const grid = ref([])
 const placements = ref([])
 const found = ref([]) // [{ word, cells, color }] — each word at most once
@@ -42,14 +49,17 @@ const wordCard = ref(null) // word shown in the "found" card (until Next Word)
 const flash = ref(null)
 const message = ref(null) // { kind, text } — short feedback under the grid
 const showClues = ref(false)
-const timeLeft = ref(level.timeLimit)
+const timeLeft = ref(diff.timeLimit)
+const pics = ref({}) // pictures opened with "Show picture" (Normal / Hard)
 const promptEl = ref(null)
 let timer = null
 let flashTimer = null
 
 const foundWords = computed(() => found.value.map((f) => f.word))
 const foundColors = computed(() => Object.fromEntries(found.value.map((f) => [f.word, f.color])))
-const allFound = computed(() => found.value.length === words.length)
+const allFound = computed(() => words.length > 0 && found.value.length === words.length)
+const picShown = (word) => diff.picture === 'shown' || !!pics.value[word] || foundWords.value.includes(word)
+const picMap = computed(() => Object.fromEntries(words.map((x) => [x, picShown(x)])))
 const timeText = computed(() => `${Math.floor(timeLeft.value / 60)}:${String(timeLeft.value % 60).padStart(2, '0')}`)
 const targetWord = computed(() => (target.value ? byWord[target.value] : null))
 const hintStep = computed(() => (target.value ? hints.value[target.value] || 0 : 0))
@@ -79,14 +89,12 @@ const wide = computed(() => vw.value > 980)
 const cell = computed(() => {
   const maxW = wide.value ? Math.min(vw.value, 1180) - 420 : vw.value - 36
   const maxH = wide.value ? vh.value - 120 : 9999
-  return Math.max(30, Math.min(58, Math.floor(Math.min(maxW, maxH) / level.gridSize)))
+  return Math.max(30, Math.min(58, Math.floor(Math.min(maxW, maxH) / diff.size)))
 })
 
 // ----- game flow -----
-function start(selectedMode) {
-  mode.value = selectedMode
-  store.startRound(roomId, selectedMode)
-  const g = generateGrid(words, level.gridSize, level.directions)
+function start() {
+  const g = generateGrid(words, diff.size, diff.directions)
   grid.value = g.grid
   placements.value = g.placements
   found.value = []
@@ -95,8 +103,9 @@ function start(selectedMode) {
   wordCard.value = null
   target.value = words[0]
   message.value = null
-  timeLeft.value = level.timeLimit
-  if (!store.data.tutorials['ws-' + roomId]) store.markTutorial('ws-' + roomId)
+  pics.value = {}
+  timeLeft.value = diff.timeLimit
+  if (!store.data.tutorials[TUTORIAL]) store.markTutorial(TUTORIAL)
   phase.value = 'playing'
   startTimer()
   store.sound('click')
@@ -119,7 +128,7 @@ function startTimer() {
 
 function onSelect(cells) {
   if (phase.value !== 'playing') return
-  const res = checkSelection(cells, grid.value, words, foundWords.value, level.directions)
+  const res = checkSelection(cells, grid.value, words, foundWords.value, diff.directions)
   if (res.result === 'short') return
   if (res.result === 'found') {
     // Any word of the level counts, even if it is not the current target.
@@ -138,10 +147,10 @@ function onSelect(cells) {
     message.value = { kind: 'warn', text: `You already found ${byWord[res.word].display}. Look for a different word.` }
     store.sound('wrong')
   } else if (res.result === 'direction') {
-    message.value = { kind: 'bad', text: `Try again. In this level, words go ${level.directions.map((d) => ARROWS[d]).join(' ')} only.` }
+    message.value = { kind: 'bad', text: `Try again. In ${diff.label} mode, words go ${diff.directions.map((d) => ARROWS[d]).join(' ')} only.` }
     store.sound('wrong')
   } else {
-    message.value = { kind: 'bad', text: 'Try again. Select the letters in a straight line. Those letters do not spell a word in this level.' }
+    message.value = { kind: 'bad', text: 'Try again. Select the letters in a straight line. Those letters do not spell a word in this round.' }
     store.sound('wrong')
   }
 }
@@ -150,7 +159,7 @@ function onSelect(cells) {
 function finishWordSearch() {
   clearInterval(timer)
   const inTime = mode.value === 'challenge' && timeLeft.value > 0
-  store.completeWordSearch(roomId, inTime)
+  store.completeWordSearch(inTime)
 }
 
 /** "Next Word": close the word card and go to a word that is not found yet. */
@@ -212,10 +221,19 @@ function continuePractice() {
   phase.value = 'playing'
   message.value = { kind: 'info', text: 'Practice Mode: no timer. Take your time! (No time bonus this round.)' }
 }
+function retry() {
+  store.retryChallenge()
+  mode.value = 'challenge'
+  start()
+}
+function showPicture() {
+  if (target.value) pics.value = { ...pics.value, [target.value]: true }
+  store.sound('click')
+}
 function back() {
-  if (phase.value === 'intro' || phase.value === 'done' || found.value.length === 0) return store.go('map', { room: roomId })
+  if (phase.value === 'intro' || phase.value === 'done' || found.value.length === 0) return store.go('map')
   if (phase.value === 'playing') phase.value = 'paused'
-  store.ask('Leave this level?', 'The words you found in this round will not be saved.', 'Leave', () => store.go('map', { room: roomId }))
+  store.ask('Leave this round?', 'The words you found will not be saved. You can start again any time.', 'Leave', () => store.go('map'))
 }
 
 // ResizeObserver also catches size changes that do not fire 'resize'
@@ -228,6 +246,8 @@ onMounted(() => {
     ro.observe(document.documentElement)
   }
   onResize()
+  // Show the demo only the first time; otherwise start straight away.
+  if (valid && !round.wsDone && store.data.tutorials[TUTORIAL]) start()
 })
 onUnmounted(() => {
   window.removeEventListener('resize', onResize)
@@ -242,10 +262,10 @@ onUnmounted(() => {
     <header class="ws-head panel">
       <button class="btn btn-small" @click="back">◀ Back</button>
       <div class="title">
-        <span class="lvl">LEVEL {{ level.level }}</span>
+        <span class="lvl" :class="'d-' + diff.key">{{ diff.label.toUpperCase() }}</span>
         <strong>{{ level.name }}</strong>
       </div>
-      <div class="count" aria-live="polite">🔍 <strong>{{ found.length }}</strong> / {{ words.length }} words</div>
+      <div class="count" aria-live="polite">Words Found: <strong>{{ found.length }}</strong>/{{ words.length }}</div>
       <div v-if="mode === 'challenge' && phase !== 'intro'" class="timer" :class="{ low: timeLeft <= 30 }">⏱ {{ timeText }}</div>
       <div v-else-if="phase !== 'intro'" class="mode-tag">Practice</div>
       <span class="spacer" />
@@ -253,14 +273,16 @@ onUnmounted(() => {
       <SoundToggles inline />
       <button class="btn btn-small btn-blue" :disabled="phase !== 'playing'" @click="pause">⏸ Pause</button>
     </header>
+    <RoundSteps :step="1" class="steps-bar" />
 
     <div class="board" :class="{ wide }">
       <!-- 1. All words, compact -->
       <WordStrip
         class="a-strip"
-        :words="level.words"
+        :words="roundWords"
         :found="foundColors"
         :hints="hints"
+        :pictures="picMap"
         :target="target || ''"
         @select="chooseTarget"
         @view="viewFound"
@@ -285,7 +307,10 @@ onUnmounted(() => {
         </div>
 
         <div v-else-if="targetWord" :key="'q-' + target" class="prompt paper">
-          <div class="p-pic"><PixelSprite :name="targetWord.sprite" :size="64" label="clue picture" /></div>
+          <div class="p-pic">
+            <PixelSprite v-if="picShown(target)" :name="targetWord.sprite" :size="64" label="clue picture" />
+            <button v-else class="pic-btn" @click="showPicture">🖼<br />Show<br />picture</button>
+          </div>
           <div class="p-main">
             <div class="p-k">FIND THIS WORD · {{ words.indexOf(target) + 1 }} of {{ words.length }}</div>
             <div class="p-clue">“{{ targetWord.clue }}”</div>
@@ -301,7 +326,7 @@ onUnmounted(() => {
             <span class="cost">{{ costText }}</span>
           </div>
         </div>
-        <p class="dirs">Directions in this level: <b>{{ level.directions.map((d) => ARROWS[d]).join(' ') }}</b> · Drag from the first letter to the last letter.</p>
+        <p class="dirs">{{ diff.label }}: words go <b>{{ diff.directions.map((d) => ARROWS[d]).join(' ') }}</b> · Drag from the first letter to the last letter.</p>
       </section>
 
       <!-- 3. The grid -->
@@ -316,7 +341,7 @@ onUnmounted(() => {
           @select="onSelect"
           @dragstart="store.sound('select')"
         />
-        <div v-else class="grid-cover panel-light" :style="{ width: cell * level.gridSize + 'px', height: cell * level.gridSize + 'px' }">
+        <div v-else class="grid-cover panel-light" :style="{ width: cell * diff.size + 'px', height: cell * diff.size + 'px' }">
           <template v-if="phase === 'paused'">
             <h2 class="title-font">PAUSED</h2>
             <p>The grid is hidden while the game is paused.</p>
@@ -339,9 +364,10 @@ onUnmounted(() => {
         </button>
         <div v-if="showClues" class="clue-list">
           <ClueCard
-            v-for="w in level.words"
+            v-for="w in roundWords"
             :key="w.word"
             :word="w"
+            :show-picture="picShown(w.word)"
             :found="foundWords.includes(w.word)"
             :hint-step="hints[w.word] || 0"
             :target="target === w.word"
@@ -352,18 +378,9 @@ onUnmounted(() => {
       </section>
     </div>
 
-    <!-- Start / tutorial -->
-    <Modal v-if="phase === 'intro'" :title="`Level ${level.level}: ${level.name}`" wide>
-      <div class="learn paper">
-        <div class="learn-k">🎯 IN THIS LEVEL YOU WILL LEARN</div>
-        <ul>
-          <li><b>{{ words.length }} words</b> for things in the {{ level.name.toLowerCase() }}</li>
-          <li>Position word: <b>{{ goals.position }}</b> — <i>{{ goals.pattern }}</i></li>
-        </ul>
-        <div class="learn-k small">AFTER THIS LEVEL</div>
-        <ul class="cando"><li v-for="c in goals.canDo" :key="c">✔ {{ c }}</li></ul>
-      </div>
-      <div v-if="level.level === 1" class="tut">
+    <!-- First-time demo -->
+    <Modal v-if="phase === 'intro'" :title="`${level.name} · ${diff.label}`" wide>
+      <div v-if="diff.key === 'easy'" class="tut">
         <h3>How to find a word</h3>
         <div class="tut-row">
           <div class="paper tut-card"><PixelSprite name="bed" :size="56" /><div><small>You sleep on this.</small><br /><strong>_ _ _</strong> <small>(3 letters)</small></div></div>
@@ -376,48 +393,32 @@ onUnmounted(() => {
           <li>Drag from the <b>first letter</b> to the <b>last letter</b>.</li>
           <li>Stuck? Press <b>💡 Hint</b> ({{ costText }}).</li>
         </ol>
-        <p>In this level, words go across <b>→</b> or down <b>↓</b>.</p>
+        <p>In Easy mode, words go across <b>→</b> or down <b>↓</b>.</p>
       </div>
-      <div v-else-if="level.newSkill === 'diagonal'" class="tut">
-        <h3>New! Diagonal words ↘ ↗</h3>
+      <div v-else-if="diff.key === 'normal'" class="tut">
+        <h3>Normal: diagonal words ↘ ↗</h3>
         <div class="demo-grid">
           <span class="hl">R</span><span>A</span><span>T</span>
           <span>O</span><span class="hl">U</span><span>P</span>
           <span>S</span><span>E</span><span class="hl">G</span>
         </div>
         <p>Words can go across, down, or <b>diagonally</b>. <i>RUG</i> goes ↘. Always read from left to right.</p>
+        <p>Pictures are hidden. Press <b>🖼 Show picture</b> if you need help.</p>
       </div>
-      <div v-else-if="level.newSkill === 'backwards'" class="tut">
-        <h3>New! Backwards words ← ↑</h3>
+      <div v-else class="tut">
+        <h3>Hard: backwards words ← ↑</h3>
         <div class="tut-row">
           <div class="demo-row back"><span>P</span><span class="hl">K</span><span class="hl">N</span><span class="hl">I</span><span class="hl">S</span><div class="sweep rev" /></div>
         </div>
-        <p>Some words are written <b>backwards</b>. Here, <b>SINK</b> looks like <b>K N I S</b>.</p>
-        <p>Find the first letter <b>S</b>, then drag to the last letter <b>K</b> (drag to the left ←). Words can also go up ↑.</p>
+        <p>Some words are written <b>backwards</b>. Here, <b>SINK</b> looks like <b>K N I S</b>. Start at the first letter <b>S</b> and drag to <b>K</b> (←).</p>
+        <p>Read the English clue carefully. Pictures are hidden — press <b>🖼 Show picture</b> if you need help.</p>
       </div>
-      <div v-else class="tut">
-        <h3>Harder English clues</h3>
-        <p>Read the English clue carefully. Use <b>💡 Hint</b> to see the Thai meaning.</p>
-        <p>Words can go in all 8 directions: {{ level.directions.map((d) => ARROWS[d]).join(' ') }}</p>
-      </div>
-      <p v-if="store.settings.thai && level.level <= 3" class="thai tut-th">
-        {{ level.level === 1 ? 'อ่านคำใบ้ หาคำในตาราง แล้วลากจากตัวอักษรแรกไปตัวสุดท้าย' : level.newSkill === 'diagonal' ? 'คำศัพท์อาจอยู่ในแนวทแยง' : 'คำศัพท์บางคำเขียนกลับหลัง ให้เริ่มลากจากตัวอักษรแรกของคำ' }}
+      <p v-if="store.settings.thai" class="thai tut-th">
+        {{ diff.key === 'easy' ? 'อ่านคำใบ้ หาคำในตาราง แล้วลากจากตัวอักษรแรกไปตัวสุดท้าย' : diff.key === 'normal' ? 'คำศัพท์อาจอยู่ในแนวทแยง' : 'คำศัพท์บางคำเขียนกลับหลัง ให้เริ่มลากจากตัวอักษรแรกของคำ' }}
       </p>
-
-      <h3>Choose a mode</h3>
-      <div class="modes">
-        <button class="mode-card" :class="{ on: mode === 'practice' }" @click="mode = 'practice'">
-          <strong>🌱 Practice Mode</strong>
-          <span>No timer. Use hints any time.</span>
-        </button>
-        <button class="mode-card" :class="{ on: mode === 'challenge' }" @click="mode = 'challenge'">
-          <strong>⏱ Challenge Mode</strong>
-          <span>{{ Math.floor(level.timeLimit / 60) }}:{{ String(level.timeLimit % 60).padStart(2, '0') }} minutes. Finish in time: +20 bonus coins!</span>
-        </button>
-      </div>
+      <p class="mode-line">{{ mode === 'challenge' ? `⏱ Challenge Mode: ${Math.floor(diff.timeLimit / 60)} minutes. Finish in time for +20 coins!` : '🌱 Practice Mode: no timer.' }}</p>
       <template #actions>
-        <button class="btn" @click="store.go('map', { room: roomId })">◀ Back</button>
-        <button class="btn btn-green btn-big" @click="start(mode)">▶ Start</button>
+        <button class="btn btn-green btn-big" @click="start()">▶ Start</button>
       </template>
     </Modal>
 
@@ -427,16 +428,15 @@ onUnmounted(() => {
       <p v-if="store.settings.thai" class="thai">หมดเวลาแล้ว! บ้านและเหรียญของคุณยังอยู่ครบ</p>
       <template #actions>
         <button class="btn btn-green" @click="continuePractice">🌱 Continue in Practice Mode</button>
-        <button class="btn btn-gold" @click="start('challenge')">↻ Retry</button>
+        <button class="btn btn-gold" @click="retry">↻ Retry</button>
       </template>
     </Modal>
 
-    <!-- All found: results + review -->
+    <!-- All words found -->
     <Modal v-if="phase === 'done'" title="Great job! All words found!" wide>
-      <p class="res-line">You found all <b>{{ words.length }}</b> words in the {{ level.name }}.</p>
-      <p v-if="mode === 'challenge' && store.data.round && store.data.round.timeBonus" class="feedback good"><span class="icon">⏱</span> You finished in time! +20 time bonus.</p>
+      <p v-if="mode === 'challenge' && store.data.round && store.data.round.timeBonus" class="feedback good"><span class="icon">⏱</span> You finished in time! +20 coins at the end of the round.</p>
       <div class="review">
-        <div v-for="w in level.words" :key="w.word" class="rv paper">
+        <div v-for="w in roundWords" :key="w.word" class="rv paper">
           <PixelSprite :name="w.sprite" :size="44" :label="w.display" />
           <div class="rv-t">
             <div class="rv-w">{{ w.display }} <span class="thai">— {{ w.thai }}</span></div>
@@ -445,10 +445,9 @@ onUnmounted(() => {
           <button class="btn btn-small btn-blue btn-icon" :aria-label="'Listen to ' + w.display" @click="store.say(w.display + '. ' + w.example)">🔊</button>
         </div>
       </div>
-      <p>Next: answer 3 language challenges to finish the {{ level.name }}{{ nextLevel ? ` and open the ${nextLevel.name}` : '' }}.</p>
+      <p class="next-line">Next: read the instructions and put the items in the right place.</p>
       <template #actions>
-        <button class="btn btn-gold" @click="start(mode)">↻ Play Again</button>
-        <button class="btn btn-green btn-big" @click="store.go('challenge', { room: roomId })">Next: Language Challenge ▶</button>
+        <button class="btn btn-green btn-big" @click="store.go('quest')">Next: Place Items ▶</button>
       </template>
     </Modal>
   </main>
@@ -459,6 +458,14 @@ onUnmounted(() => {
 .ws-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 12px; margin-bottom: 12px; }
 .title { display: flex; align-items: center; gap: 8px; font-size: 19px; }
 .lvl { font-family: var(--font-title); font-size: 10px; background: var(--ink); padding: 4px 6px; }
+.lvl.d-easy { background: #2b6e2c; }
+.lvl.d-normal { background: #20568c; }
+.lvl.d-hard { background: #8b2a24; }
+.steps-bar { margin: -4px 0 10px; }
+.pic-btn { font: inherit; font-weight: 900; font-size: 12px; line-height: 1.2; width: 100%; height: 100%; background: #e9f4ff; border: none; cursor: pointer; color: #20568c; }
+.pic-btn:hover { background: #d4eaff; }
+.mode-line { font-weight: 800; }
+.next-line { font-weight: 800; margin-bottom: 0; }
 .count { font-weight: 800; background: rgba(0,0,0,.25); padding: 6px 10px; }
 .timer { font-family: var(--font-title); font-size: 15px; background: #1d3b1d; color: #b8ff8a; padding: 8px 10px; border: 2px solid var(--ink); }
 .timer.low { background: #5c1414; color: #ffb3a8; animation: pulse 1s infinite; }
@@ -542,7 +549,7 @@ onUnmounted(() => {
   /* compact on phones so the clue and the grid fit on one screen */
   .ws-head { gap: 6px; padding: 6px 8px; margin-bottom: 8px; }
   .ws-head .title { font-size: 16px; }
-  .coins-w, .lvl { display: none; }
+  .coins-w { display: none; }
   .count { padding: 4px 6px; font-size: 14px; }
   .timer { font-size: 12px; padding: 6px; }
   .mode-tag { font-size: 13px; padding: 4px 6px; }

@@ -12,7 +12,8 @@ const intro = ref(false)
 const INTRO = [
   { en: 'Welcome to BUILDVERSE!', th: 'ยินดีต้อนรับสู่ BUILDVERSE!' },
   { en: 'This is your new home.', th: 'นี่คือบ้านใหม่ของคุณ' },
-  { en: 'Complete word quests, earn coins, and decorate each room!', th: 'ทำภารกิจคำศัพท์ รับเหรียญ แล้วตกแต่งทุกห้องกันเถอะ!' },
+  { en: 'Find words, then follow English instructions to place things in each room.', th: 'หาคำศัพท์ แล้วทำตามคำสั่งภาษาอังกฤษเพื่อจัดของในแต่ละห้อง' },
+  { en: 'Earn coins and decorate your own house!', th: 'รับเหรียญ แล้วตกแต่งบ้านของคุณเองได้เลย!' },
 ]
 
 function click(fn) {
@@ -22,6 +23,16 @@ function click(fn) {
 function startNew() {
   store.newGame()
   intro.value = true
+}
+/** Play: continue the saved game, or start a new one the first time. */
+function play() {
+  if (store.hasSave) store.go('map')
+  else startNew()
+}
+/** My House / Shop work before the first round too. */
+function openScreen(name) {
+  if (!store.hasSave) store.newGame()
+  store.go(name)
 }
 function newGame() {
   if (store.hasSave) {
@@ -55,12 +66,19 @@ const decor = ['tree', 'flowerpot', 'bench', 'fountain']
         <PixelSprite name="npc" :size="150" class="npc" />
       </div>
       <nav class="buttons panel">
-        <button v-if="store.hasSave" class="btn btn-big btn-green" @click="click(() => store.go('map'))">▶ Continue</button>
-        <button class="btn btn-big" :class="store.hasSave ? 'btn-wood' : 'btn-green'" @click="click(newGame)">✚ New Game</button>
-        <button class="btn btn-big btn-gold" @click="click(() => store.go('goals'))">🎯 Learning Goals</button>
-        <button class="btn btn-big btn-blue" @click="click(() => store.go('howto'))">? How to Play</button>
-        <button class="btn btn-big" @click="click(() => store.go('settings'))">⚙ Settings</button>
-        <button class="btn btn-big" @click="click(() => store.go('credits'))">★ Credits</button>
+        <button class="btn btn-big btn-green play" @click="click(play)">
+          ▶ Play
+          <small v-if="store.hasSave">Continue · {{ store.clearedCount }}/5 rooms</small>
+        </button>
+        <button class="btn btn-big btn-blue" @click="click(() => openScreen('house'))">🛋 My House</button>
+        <button class="btn btn-big btn-gold" @click="click(() => openScreen('shop'))">🛒 Shop</button>
+        <button class="btn btn-big btn-wood" @click="click(() => store.go('howto'))">? How to Play</button>
+        <div class="small-links">
+          <button class="link" @click="click(() => store.go('settings'))">⚙ Settings</button>
+          <button class="link" @click="click(() => store.go('goals'))">🎯 Learning Goals</button>
+          <button class="link" @click="click(() => store.go('credits'))">★ Credits</button>
+          <button v-if="store.hasSave" class="link danger" @click="click(newGame)">✚ New Game</button>
+        </div>
       </nav>
       <div class="side right" aria-hidden="true">
         <PixelSprite v-for="d in decor" :key="d" :name="d" :size="64" />
@@ -91,6 +109,12 @@ const decor = ['tree', 'flowerpot', 'bench', 'fountain']
 .load-error { max-width: 640px; margin: 0 auto 16px; text-align: left; }
 .menu-body { display: flex; align-items: center; justify-content: center; gap: 30px; }
 .buttons { display: flex; flex-direction: column; gap: 12px; padding: 22px; }
+.play { flex-direction: column; gap: 2px; font-size: 24px; }
+.play small { font-size: 13px; font-weight: 800; }
+.small-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; margin-top: 4px; }
+.link { font: inherit; font-weight: 800; font-size: 14px; color: #ffe7c2; background: none; border: none; cursor: pointer; padding: 4px; text-decoration: underline; text-underline-offset: 3px; }
+.link:hover { color: #fff; }
+.link.danger { color: #ffb3a8; }
 .side { width: 170px; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
 .npc { animation: bob 1.8s ease-in-out infinite; }
 .intro { max-width: 760px; margin: 0 auto; text-align: left; }

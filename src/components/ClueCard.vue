@@ -11,6 +11,7 @@ const props = defineProps({
   hintStep: { type: Number, default: 0 }, // 1 = Thai, 2 = first letter, 3 = word
   target: { type: Boolean, default: false },
   color: { type: String, default: '#5fb340' },
+  showPicture: { type: Boolean, default: true },
 })
 const emit = defineEmits(['select'])
 
@@ -29,7 +30,7 @@ const showThai = computed(() => props.found || props.hintStep >= 1)
     :aria-label="found ? `${word.display}, found` : `Choose this word: ${word.clue}`"
     @click="emit('select')"
   >
-    <div class="pic"><PixelSprite :name="word.sprite" :size="46" :label="showWord ? word.display : 'clue picture'" /></div>
+    <div class="pic"><PixelSprite v-if="showPicture || found" :name="word.sprite" :size="46" :label="showWord ? word.display : 'clue picture'" /><span v-else class="noimg" aria-hidden="true">?</span></div>
     <div class="body">
       <div class="status">
         <span v-if="found" class="st ok">✓ Found</span>
@@ -59,6 +60,7 @@ const showThai = computed(() => props.found || props.hintStep >= 1)
 .clue.target { box-shadow: 0 0 0 3px var(--gold), 0 3px 0 rgba(0,0,0,.25); background: #fff7d6; }
 .clue.found { background: color-mix(in srgb, var(--c) 22%, #fff); }
 .pic { width: 54px; height: 54px; flex: none; display: flex; align-items: center; justify-content: center; background: #e9f4ff; border: 2px solid var(--ink); border-radius: 3px; }
+.noimg { font-family: var(--font-title); font-size: 18px; color: #8b8b8b; }
 .body { flex: 1; min-width: 0; }
 .status { display: flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 900; }
 .st { padding: 1px 6px; border: 2px solid var(--ink); background: #ddd; color: #555; }

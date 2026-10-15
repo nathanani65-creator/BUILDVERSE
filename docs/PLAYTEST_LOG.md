@@ -16,14 +16,14 @@ Use one copy of this form for each tester. Watch quietly first; help only if the
 ## B. Tasks (tick and time each one)
 | # | Task | Done without help? (Y / N) | Time | Notes |
 |---|---|---|---|---|
-| 1 | Read How to Play and start a new game | | | |
-| 2 | Find all words in the Bedroom | | | |
+| 1 | Read How to Play and press Play | | | |
+| 2 | Find all words in the Bedroom (Easy) | | | |
 | 3 | Use Hint at least once | | | |
-| 4 | Finish the 3 language challenges | | | |
-| 5 | Buy the bed, desk and lamp | | | |
-| 6 | Put the lamp on the desk and pass Check Placement | | | |
-| 7 | Open the Living Room | | | |
-| 8 | (Optional) Try Challenge Mode and Pause | | | |
+| 4 | Follow the instruction and pass Check Placement | | | |
+| 5 | Get the rewards and see the Living Room open | | | |
+| 6 | Play the Bedroom again (new words) | | | |
+| 7 | Buy something in the Shop and put it in My House | | | |
+| 8 | (Optional) Try Normal or Hard, or Challenge Mode | | | |
 
 ## C. Questions for the tester (score 1 = no, 5 = yes, very much)
 | Question | 1–5 | Comment |
@@ -32,8 +32,9 @@ Use one copy of this form for each tester. Watch quietly first; help only if the
 | Dragging letters in the grid was easy. | | |
 | The clues helped me find the words. | | |
 | I learned new English words. | | |
-| The language challenges were clear. | | |
-| Decorating the room was easy. | | |
+| The English instructions (Put the … on/under/next to/between …) were clear. | | |
+| Dragging the item to the right place was easy. | | |
+| I want to play again with new words. | | |
 | The game was fun. I want to play more. | | |
 
 Open questions:

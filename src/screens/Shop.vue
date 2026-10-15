@@ -1,4 +1,7 @@
 <script setup>
+// SHOP — optional decorations for My House. Nothing here is needed to play.
+// A room's furniture can be bought once that room is unlocked; locked rooms
+// show a preview.
 import { ref, computed } from 'vue'
 import { useGameStore } from '../stores/game.js'
 import { LEVELS, LEVEL_BY_ID } from '../data/levels.js'
@@ -7,16 +10,18 @@ import TopBar from '../components/TopBar.vue'
 import PixelSprite from '../components/PixelSprite.vue'
 
 const store = useGameStore()
-const tab = ref(store.params.room || store.activeRoomId || 'bedroom')
-const items = computed(() => itemsForRoom(tab.value).sort((a, b) => (b.required ? 1 : 0) - (a.required ? 1 : 0)))
+const start = store.params.room || store.nextRoomId || 'bedroom'
+const tab = ref(start)
+const items = computed(() => itemsForRoom(tab.value))
 const roomUnlocked = computed(() => store.isUnlocked(tab.value))
+const ownedCount = computed(() => items.value.filter((i) => store.data.owned.includes(i.id)).length)
 
 function stateOf(item) {
   const s = store.buyState(item.id)
-  if (s.ok) return { key: 'buy', label: `Buy · ${item.price}` }
+  if (s.ok) return { key: 'buy', label: `Buy · ${item.price} 🪙` }
   if (s.state === 'owned') return { key: 'owned', label: '✔ Owned' }
   if (s.state === 'locked') return { key: 'locked', label: '🔒 Locked', reason: s.reason }
-  return { key: 'coins', label: `Buy · ${item.price}`, reason: s.reason }
+  return { key: 'coins', label: `Buy · ${item.price} 🪙`, reason: s.reason }
 }
 function pickTab(id) {
   store.sound('click')
@@ -26,7 +31,7 @@ function pickTab(id) {
 
 <template>
   <main class="screen">
-    <TopBar />
+    <TopBar goal="Buy furniture to decorate your house (optional)." />
     <h1 class="screen-title">Shop</h1>
 
     <div class="tabs" role="tablist">
@@ -35,16 +40,11 @@ function pickTab(id) {
       </button>
     </div>
 
-    <p v-if="!roomUnlocked" class="feedback warn"><span class="icon">🔒</span><span>The {{ LEVEL_BY_ID[tab].name }} is locked. Complete the {{ LEVELS[LEVEL_BY_ID[tab].level - 2].name }} quest first.</span></p>
-    <p v-else-if="!store.isCompleted(tab)" class="feedback info"><span class="icon">ℹ</span><span>Buy the <b>Required</b> items for this room's quest. Extra decorations unlock after you finish the room.</span></p>
-    <p v-else class="feedback good"><span class="icon">✔</span><span>Room complete! Extra decorations are open. Replay levels to earn more coins.</span></p>
+    <p v-if="!roomUnlocked" class="feedback warn"><span class="icon">🔒</span><span>Preview: clear the {{ LEVELS[LEVEL_BY_ID[tab].level - 2].name }} to unlock the {{ LEVEL_BY_ID[tab].name }} and buy these.</span></p>
+    <p v-else class="feedback info"><span class="icon">ℹ</span><span>Buy furniture for <b>My House</b>. You own {{ ownedCount }} of {{ items.length }} here. Earn coins by playing rounds — you never need to buy anything to play.</span></p>
 
     <div class="items">
       <article v-for="item in items" :key="item.id" class="item panel-light" :class="'st-' + stateOf(item).key">
-        <div class="flags">
-          <span v-if="item.required" class="badge badge-req">★ Required</span>
-          <span v-else class="badge badge-gold">Decoration</span>
-        </div>
         <div class="pic"><PixelSprite :name="item.sprite" :variant="item.variant || ''" :size="84" :label="item.name" /></div>
         <h3>{{ item.name }}</h3>
         <p v-if="store.settings.thai" class="thai">{{ item.thai }}</p>
@@ -64,7 +64,7 @@ function pickTab(id) {
     </div>
 
     <div class="row foot">
-      <button class="btn btn-blue" @click="store.go('house', { room: tab })">🛋 Go to My House</button>
+      <button class="btn btn-blue" :disabled="!roomUnlocked" @click="store.go('house', { room: tab })">🛋 Decorate My House</button>
     </div>
   </main>
 </template>
@@ -76,12 +76,11 @@ function pickTab(id) {
 .item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; position: relative; }
 .item h3 { margin: 0; font-size: 20px; }
 .item p { margin: 0; }
-.flags { align-self: flex-start; }
 .pic { background: #fff; border: 3px solid var(--ink); padding: 6px; border-radius: 3px; }
 .desc { font-size: 15px; min-height: 40px; }
 .price { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 20px; }
 .reason { font-size: 13px; color: #6b4a00; font-weight: 700; }
 .st-owned { background: #cfe8cf; }
-.st-locked { filter: grayscale(.6); }
+.st-locked .pic { filter: grayscale(.7); }
 .foot { justify-content: center; margin-top: 18px; }
 </style>

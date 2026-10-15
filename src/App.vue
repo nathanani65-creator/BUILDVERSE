@@ -9,14 +9,13 @@ import Modal from './components/Modal.vue'
 import MainMenu from './screens/MainMenu.vue'
 import HouseMap from './screens/HouseMap.vue'
 import WordSearch from './screens/WordSearch.vue'
-import LanguageChallenge from './screens/LanguageChallenge.vue'
-import QuestComplete from './screens/QuestComplete.vue'
+import DecorQuest from './screens/DecorQuest.vue'
+import RoundReward from './screens/RoundReward.vue'
 import Shop from './screens/Shop.vue'
 import MyHouse from './screens/MyHouse.vue'
 import HowToPlay from './screens/HowToPlay.vue'
 import Settings from './screens/Settings.vue'
 import Credits from './screens/Credits.vue'
-import Ending from './screens/Ending.vue'
 import ReviewWords from './screens/ReviewWords.vue'
 import LearningGoals from './screens/LearningGoals.vue'
 
@@ -27,14 +26,13 @@ const SCREENS = {
   menu: MainMenu,
   map: HouseMap,
   wordsearch: WordSearch,
-  challenge: LanguageChallenge,
-  complete: QuestComplete,
+  quest: DecorQuest,
+  reward: RoundReward,
   shop: Shop,
   house: MyHouse,
   howto: HowToPlay,
   settings: Settings,
   credits: Credits,
-  ending: Ending,
   review: ReviewWords,
   goals: LearningGoals,
 }

@@ -1,17 +1,17 @@
 <script setup>
+// MY HOUSE — the player's own home. Free decorating with furniture bought in
+// the Shop. Decorating Quests never change anything here.
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '../stores/game.js'
-import { LEVELS, LEVEL_BY_ID, POSITION_WORDS } from '../data/levels.js'
+import { LEVELS, LEVEL_BY_ID } from '../data/levels.js'
 import { ITEM_BY_ID, ROOM_COLS, ROOM_ROWS, itemsForRoom } from '../data/furniture.js'
 import { resolveDrop, cellsOf, occupiedCells, childrenOf } from '../logic/placement.js'
 import TopBar from '../components/TopBar.vue'
 import RoomView from '../components/RoomView.vue'
 import PixelSprite from '../components/PixelSprite.vue'
-import SceneView from '../components/SceneView.vue'
-import Modal from '../components/Modal.vue'
 
 const store = useGameStore()
-const startRoom = store.params.room || store.activeRoomId || 'bedroom'
+const startRoom = store.params.room || 'bedroom'
 const tab = ref(store.isUnlocked(startRoom) ? startRoom : 'bedroom')
 const level = computed(() => LEVEL_BY_ID[tab.value])
 
@@ -20,9 +20,6 @@ const selected = ref(null)
 const moveMode = ref(false)
 const drag = ref(null)
 const hoverCell = ref(null)
-const checkResult = ref(null)
-const lesson = ref(null) // { words: [...], thenCheck: bool }
-const success = ref(null)
 
 // ----- sizes -----
 const vw = ref(window.innerWidth)
@@ -137,7 +134,6 @@ function doPlace(id, c) {
   } else {
     selected.value = id
     moveMode.value = false
-    checkResult.value = null
   }
   hoverCell.value = null
 }
@@ -145,7 +141,6 @@ function doPlace(id, c) {
 function rotateSel() {
   const r = store.rotate(selected.value)
   if (!r.ok) store.toast(r.reason, 'warn')
-  checkResult.value = null
 }
 function storeSel() {
   const kids = childrenOf(selected.value, placements.value)
@@ -154,73 +149,16 @@ function storeSel() {
   store.toast(`${names.join(' and ')} went back to your inventory.`.replace(/^t/, 'T'), 'info')
   selected.value = null
   moveMode.value = false
-  checkResult.value = null
 }
 function switchRoom(id) {
   if (!store.isUnlocked(id)) {
-    store.toast(`The ${LEVEL_BY_ID[id].name} is locked. Complete the ${LEVELS[LEVEL_BY_ID[id].level - 2].name} first.`, 'warn')
+    store.toast(`The ${LEVEL_BY_ID[id].name} is locked. Clear the ${LEVELS[LEVEL_BY_ID[id].level - 2].name} once to open it.`, 'warn')
     return
   }
   store.sound('click')
   tab.value = id
   selected.value = null
   moveMode.value = false
-  checkResult.value = null
-}
-
-// ----- quest checking -----
-function ruleText(rule) {
-  if (rule.type === 'placed') return `Place the ${ITEM_BY_ID[rule.item].name.toLowerCase()} in the room.`
-  return rule.text
-}
-function ruleHint(rule) {
-  if (rule.type === 'placed') {
-    return store.data.owned.includes(rule.item)
-      ? `Drag the ${ITEM_BY_ID[rule.item].name.toLowerCase()} from your inventory into the room.`
-      : `Buy the ${ITEM_BY_ID[rule.item].name.toLowerCase()} in the Shop first.`
-  }
-  return rule.hint
-}
-function ruleStatus(i) {
-  if (!checkResult.value) return null
-  return checkResult.value.results[i].ok
-}
-const firstFail = computed(() => checkResult.value?.results.find((r) => !r.ok)?.rule || null)
-// Explain WHY with the meaning of the position word in the failed rule.
-const RULE_WORD = { on: 'on', under: 'under', nextTo: 'next to', between: 'between' }
-const failWhy = computed(() => {
-  const w = firstFail.value && RULE_WORD[firstFail.value.type]
-  return w ? POSITION_WORDS[w].text.split('. ')[0] + '.' : ''
-})
-
-function askCheck() {
-  if (!store.data.tutorials['pos-' + tab.value]) {
-    lesson.value = { words: level.value.placement.teach, thenCheck: true }
-    return
-  }
-  runCheck()
-}
-function closeLesson() {
-  const then = lesson.value?.thenCheck
-  store.markTutorial('pos-' + tab.value)
-  lesson.value = null
-  if (then) runCheck()
-}
-function runCheck() {
-  const res = store.checkPlacement(tab.value)
-  checkResult.value = res
-  if (!res.lessonsDone) {
-    store.sound('wrong')
-    return
-  }
-  if (res.passed) {
-    store.sound(res.newlyCompleted ? 'unlock' : 'success')
-    store.celebrate('unlock')
-    if (res.newlyCompleted) success.value = { unlocked: res.unlocked }
-    else store.toast('Great job! Everything is in the right place.', 'good')
-  } else {
-    store.sound('wrong')
-  }
 }
 
 onMounted(() => {
@@ -239,7 +177,7 @@ onUnmounted(() => {
 
 <template>
   <main class="screen house">
-    <TopBar :goal="store.isCompleted(tab) ? 'Free decorating! Move, rotate or add things.' : store.goalFor(tab)" />
+    <TopBar goal="Decorate your house! Drag furniture from your inventory." />
 
     <div class="room-tabs" role="tablist">
       <button
@@ -251,7 +189,7 @@ onUnmounted(() => {
         :aria-selected="tab === l.id"
         @click="switchRoom(l.id)"
       >
-        {{ store.isUnlocked(l.id) ? (store.isCompleted(l.id) ? '✔ ' : '') : '🔒 ' }}{{ l.name }}
+        {{ store.isUnlocked(l.id) ? '' : '🔒 ' }}{{ l.name }}
       </button>
     </div>
 
@@ -319,39 +257,21 @@ onUnmounted(() => {
           <button class="btn btn-small btn-gold" @click="store.go('shop', { room: tab })">🛒 Shop</button>
         </div>
       </div>
-      <!-- quest panel -->
-      <div class="quest panel-light">
-        <div v-if="store.isCompleted(tab)" class="feedback good"><span class="icon">✔</span><span>Quest complete! Free decorating mode is ON.</span></div>
-        <h2 class="q-title">Room Quest</h2>
-        <div v-for="ins in level.placement.instructions" :key="ins" class="instruction">
-          <span>“{{ ins }}”</span>
-          <button class="btn btn-small btn-blue btn-icon" :aria-label="'Listen: ' + ins" @click="store.say(ins)">🔊</button>
-        </div>
-        <button class="btn btn-small btn-wood" @click="lesson = { words: level.placement.teach, thenCheck: false }">📘 Learn: {{ level.placement.teach.join(', ') }}</button>
-
-        <ul class="checklist">
-          <li v-for="(r, i) in level.placement.rules" :key="i" :class="{ ok: ruleStatus(i) === true, no: ruleStatus(i) === false }">
-            <span class="box">{{ ruleStatus(i) === true ? '✔' : ruleStatus(i) === false ? '✖' : '☐' }}</span>
-            <span>{{ ruleText(r) }}</span>
-            <span class="sr-only">{{ ruleStatus(i) === true ? 'done' : ruleStatus(i) === false ? 'not yet' : '' }}</span>
-          </li>
+      <!-- help -->
+      <div class="help panel-light">
+        <h2 class="q-title">My House</h2>
+        <p>This is <b>your</b> home. Decorate it any way you like!</p>
+        <ul>
+          <li>Drag furniture from the inventory into the room, or tap it and then tap a square.</li>
+          <li>Click a piece of furniture to <b>move</b>, <b>rotate</b> or <b>store</b> it.</li>
+          <li>Small things (lamp, kettle, cup, towel) can go <b>on</b> a desk, cabinet or shower.</li>
+          <li>Get more furniture in the 🛒 Shop. Earn coins by playing rounds.</li>
         </ul>
-
-        <div v-if="checkResult && !checkResult.lessonsDone" class="feedback warn">
-          <span class="icon">!</span><span>First, finish the Word Search and the Language Challenge for this room.</span>
+        <p class="muted small">Playing a Decorating Quest never changes your house.</p>
+        <div class="row">
+          <button class="btn btn-gold" @click="store.go('shop', { room: tab })">🛒 Shop</button>
+          <button class="btn btn-green" @click="store.go('map')">▶ Play a round</button>
         </div>
-        <div v-else-if="checkResult && !checkResult.passed" class="feedback bad">
-          <span class="icon">✖</span>
-          <div>
-            <div>Not yet! This part is not done: “{{ ruleText(firstFail) }}”</div>
-            <div v-if="failWhy" class="hint">Why: {{ failWhy }}</div>
-            <div class="hint">Hint: {{ ruleHint(firstFail) }}</div>
-          </div>
-        </div>
-        <div v-else-if="checkResult && checkResult.passed" class="feedback good"><span class="icon">✔</span><span>Great job! Your room is ready!</span></div>
-
-        <button class="btn btn-green btn-big check" @click="askCheck">✔ Check Placement</button>
-        <button v-if="!store.roomState(tab).challenge" class="btn btn-small" @click="store.go('map', { room: tab })">Go to the {{ level.name }} quests</button>
       </div>
       </aside>
     </div>
@@ -361,36 +281,6 @@ onUnmounted(() => {
       <PixelSprite :name="ITEM_BY_ID[drag.itemId].sprite" :variant="ITEM_BY_ID[drag.itemId].variant || ''" size="100%" />
     </div>
 
-    <!-- position words lesson -->
-    <Modal v-if="lesson" title="Position words" wide>
-      <p v-if="lesson.thenCheck">Before we check your room, let's learn the position word{{ lesson.words.length > 1 ? 's' : '' }}!</p>
-      <div class="lessons">
-        <div v-for="w in lesson.words" :key="w" class="lesson paper">
-          <div class="lw">{{ w.toUpperCase() }} <span v-if="store.settings.thai" class="thai">({{ POSITION_WORDS[w].thai }})</span></div>
-          <SceneView :scene="POSITION_WORDS[w].scene" :width="260" />
-          <p>{{ POSITION_WORDS[w].text }}</p>
-          <button class="btn btn-small btn-blue" @click="store.say(POSITION_WORDS[w].text.split('= ')[1])">🔊 Listen</button>
-        </div>
-      </div>
-      <template #actions>
-        <button class="btn btn-green" @click="closeLesson">{{ lesson.thenCheck ? 'Got it! Check my room ▶' : 'Got it!' }}</button>
-      </template>
-    </Modal>
-
-    <!-- room complete -->
-    <Modal v-if="success" title="Great job! Your room is ready!">
-      <div class="center">
-        <PixelSprite name="npc" :size="90" />
-        <p class="big">The {{ level.name }} is complete!</p>
-        <p v-if="success.unlocked" class="feedback good"><span class="icon">🔓</span><span>New room unlocked: <b>{{ LEVEL_BY_ID[success.unlocked].name }}</b>!</span></p>
-        <p>You can come back and decorate this room any time.</p>
-      </div>
-      <template #actions>
-        <button class="btn" @click="success = null">Keep decorating</button>
-        <button v-if="success.unlocked" class="btn btn-green" @click="store.go('map', { room: success.unlocked })">Go to the {{ LEVEL_BY_ID[success.unlocked].name }} ▶</button>
-        <button v-else class="btn btn-green" @click="store.go('ending')">See my home ▶</button>
-      </template>
-    </Modal>
   </main>
 </template>
 
@@ -414,7 +304,10 @@ onUnmounted(() => {
 .inv-item.sel { box-shadow: 0 0 0 3px var(--gold), inset 3px 3px 0 #fff; }
 .inv-empty { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .side { flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 12px; }
-.quest { display: flex; flex-direction: column; gap: 10px; }
+.help { display: flex; flex-direction: column; gap: 6px; }
+.help ul { margin: 0; padding-left: 20px; }
+.help li { margin: 4px 0; }
+.small { font-size: 14px; margin: 0; }
 .q-title { font-family: var(--font-title); font-size: 13px; margin: 0; }
 .instruction { display: flex; align-items: center; gap: 8px; justify-content: space-between; font-size: 21px; font-weight: 900; background: #fffdf5; border: 3px solid var(--ink); padding: 8px 10px; }
 .checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
@@ -425,8 +318,6 @@ onUnmounted(() => {
 .hint { font-weight: 700; margin-top: 4px; }
 .check { min-width: 0; width: 100%; }
 .ghost { position: fixed; pointer-events: none; transform: translate(-50%, -50%) scale(1.1); z-index: 400; opacity: .85; filter: drop-shadow(4px 6px 0 rgba(0,0,0,.35)); }
-.lessons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-.lesson { color: var(--ink); display: flex; flex-direction: column; gap: 8px; align-items: center; max-width: 300px; text-align: center; }
 .lw { font-family: var(--font-title); font-size: 16px; }
 .big { font-size: 20px; font-weight: 900; }
 @media (max-width: 1100px) {

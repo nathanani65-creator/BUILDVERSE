@@ -19,7 +19,7 @@ function nav(screen) {
     </div>
     <CoinCounter :coins="store.data.coins" />
     <nav class="row nav">
-      <button class="btn btn-small btn-green" :class="{ pressed: store.screen === 'map' }" @click="nav('map')">🏠 Map</button>
+      <button class="btn btn-small btn-green" :class="{ pressed: store.screen === 'map' }" @click="nav('map')">🏠 Rooms</button>
       <button class="btn btn-small btn-gold" :class="{ pressed: store.screen === 'shop' }" @click="nav('shop')">🛒 Shop</button>
       <button class="btn btn-small btn-blue" :class="{ pressed: store.screen === 'house' }" @click="nav('house')">🛋 My House</button>
       <button class="btn btn-small" @click="nav('menu')">☰ Menu</button>

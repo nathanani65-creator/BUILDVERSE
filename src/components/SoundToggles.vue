@@ -11,7 +11,7 @@ function toggle(key) {
 </script>
 
 <template>
-  <div class="sound-toggles" :class="{ inline: props.inline, 'on-ws': store.screen === 'wordsearch' }" role="group" aria-label="Sound">
+  <div class="sound-toggles" :class="{ inline: props.inline, 'on-ws': store.screen === 'wordsearch' || store.screen === 'quest' }" role="group" aria-label="Sound">
     <button
       class="btn btn-icon st"
       :class="store.settings.music ? 'btn-green' : 'off'"

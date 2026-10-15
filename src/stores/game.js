@@ -1,27 +1,25 @@
 // ---------------------------------------------------------------------------
 // GAME STORE (Pinia) — all game state lives here.
-// Every change that matters (coins, purchases, placements, unlocks, rewards)
-// calls `persist()` straight away so a page refresh never loses progress and
-// never gives a reward twice.
+//
+// One ROUND = 1. Find Words (Word Search) → 2. Place Items (Decorating Quest)
+//             → 3. Rewards.
+// Every important change (coins, rewards, purchases, My House, unlocks) calls
+// persist() straight away, so a refresh never loses progress and never pays a
+// reward twice.
 // ---------------------------------------------------------------------------
 import { defineStore } from 'pinia'
-import { LEVELS, LEVEL_BY_ID } from '../data/levels.js'
-import { ITEM_BY_ID, requiredItems } from '../data/furniture.js'
+import { LEVELS, LEVEL_BY_ID, DIFFICULTY } from '../data/levels.js'
+import { ITEM_BY_ID } from '../data/furniture.js'
 import { loadGame, saveGame, saveSettings, clearGame, newSaveData, defaultSettings } from '../logic/save.js'
 import { roundReward, canBuy } from '../logic/economy.js'
-import { resolveDrop, canPlaceOnFloor, childrenOf, checkRoom } from '../logic/placement.js'
+import { buildRound, wordSetKey } from '../logic/round.js'
+import { resolveDrop, canPlaceOnFloor, childrenOf } from '../logic/placement.js'
 import { playSound, setAudioSettings, speak } from '../logic/audio.js'
 
 let toastId = 0
 
 function article(word) {
   return /^[aeiou]/i.test(word) ? 'an' : 'a'
-}
-
-export function listWithAnd(items) {
-  if (items.length <= 1) return items.join('')
-  if (items.length === 2) return `${items[0]} and ${items[1]}`
-  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`
 }
 
 export const useGameStore = defineStore('game', {
@@ -39,81 +37,55 @@ export const useGameStore = defineStore('game', {
 
   getters: {
     levels: () => LEVELS,
-    roomState: (state) => (id) => state.data.rooms[id] || { wordSearch: false, challenge: false, firstClear: false, completed: false },
+    roomState: (state) => (id) => state.data.rooms[id] || { cleared: false, bonusClaimed: false, plays: 0 },
+    isCleared() {
+      return (id) => this.roomState(id).cleared
+    },
+    /** A room is open when it is the first room or the room before it is cleared. */
     isUnlocked() {
       return (id) => {
         const i = LEVELS.findIndex((l) => l.id === id)
         if (i <= 0) return i === 0
-        return this.roomState(LEVELS[i - 1].id).completed
+        return this.isCleared(LEVELS[i - 1].id)
       }
     },
-    isCompleted() {
-      return (id) => this.roomState(id).completed
+    clearedCount() {
+      return LEVELS.filter((l) => this.isCleared(l.id)).length
     },
-    /** The room the player should work on next (null when all rooms are done). */
-    activeRoomId() {
-      const l = LEVELS.find((lv) => this.isUnlocked(lv.id) && !this.isCompleted(lv.id))
-      return l ? l.id : null
+    allCleared() {
+      return this.clearedCount === LEVELS.length
     },
-    completedCount() {
-      return LEVELS.filter((l) => this.isCompleted(l.id)).length
+    /** Difficulty can be chosen after the room has been cleared once. */
+    canChooseDifficulty() {
+      return (id) => this.isCleared(id)
     },
-    missingRequired() {
-      return (roomId) => requiredItems(roomId).filter((it) => !this.data.owned.includes(it.id))
+    /** The first room that is open but not cleared yet. */
+    nextRoomId() {
+      return LEVELS.find((l) => this.isUnlocked(l.id) && !this.isCleared(l.id))?.id || null
     },
-    /** Step number 0–4 for a room: WS, LC, buy, place */
-    roomProgress() {
-      return (roomId) => {
-        const r = this.roomState(roomId)
-        let steps = 0
-        if (r.wordSearch) steps++
-        if (r.challenge) steps++
-        if (r.challenge && this.missingRequired(roomId).length === 0) steps++
-        if (r.completed) steps = 4
-        return steps
-      }
-    },
-    /** Next thing the player has to do in a room. */
-    nextStep() {
-      return (roomId) => {
-        const r = this.roomState(roomId)
-        if (!this.isUnlocked(roomId)) return 'locked'
-        if (r.completed) return 'done'
-        if (!r.wordSearch) return 'wordsearch'
-        if (!r.challenge) return 'challenge'
-        if (this.missingRequired(roomId).length) return 'shop'
-        return 'decorate'
-      }
-    },
-    goalFor() {
-      return (roomId) => {
-        const level = LEVEL_BY_ID[roomId]
-        switch (this.nextStep(roomId)) {
-          case 'locked':
-            return `Finish the ${LEVELS[level.level - 2].name} to unlock this room.`
-          case 'wordsearch':
-            return `Find ${level.words.length} words in the ${level.name}.`
-          case 'challenge':
-            return 'Complete 3 language challenges.'
-          case 'shop': {
-            const names = this.missingRequired(roomId).map((it) => `${article(it.name)} ${it.name.toLowerCase()}`)
-            return `Buy ${listWithAnd(names)}.`
-          }
-          case 'decorate':
-            return level.placement.instructions.join(' ')
-          default:
-            return 'Room complete! Decorate it any way you like.'
-        }
-      }
+    /** A round that was started but not finished (e.g. after a refresh). */
+    openRound() {
+      const r = this.data.round
+      return r && !r.claimed ? r : null
     },
     currentGoal() {
-      const id = this.activeRoomId
-      if (!id) return 'Your home is complete! Decorate freely or replay levels for coins.'
-      return this.goalFor(id)
+      const r = this.openRound
+      if (r && r.wsDone && !r.questDone) return `Place the items in the ${LEVEL_BY_ID[r.roomId].name}.`
+      if (r && r.questDone) return 'Collect your coins!'
+      const next = this.nextRoomId
+      if (next) {
+        const i = LEVEL_BY_ID[next].level
+        return LEVELS[i] ? `Play the ${LEVEL_BY_ID[next].name} to unlock the ${LEVELS[i].name}.` : `Play the ${LEVEL_BY_ID[next].name} to finish your home!`
+      }
+      return 'All rooms are open! Play any room for coins, or decorate your house.'
     },
+    /** Words the player has met, with their room. */
     learnedWords() {
-      return LEVELS.filter((l) => this.roomState(l.id).challenge).flatMap((l) => l.words.map((w) => ({ ...w, room: l.name })))
+      const out = []
+      for (const l of LEVELS) for (const w of l.words) if (this.data.learned.includes(w.word)) out.push({ ...w, room: l.name, roomId: l.id })
+      return out
     },
+    totalWords: () => LEVELS.reduce((n, l) => n + l.words.length, 0),
   },
 
   actions: {
@@ -125,6 +97,7 @@ export const useGameStore = defineStore('game', {
       if (result.status === 'ok') {
         this.data = result.data
         this.hasSave = true
+        this.persist() // writes the upgraded save format straight away
       } else if (result.status === 'error') {
         this.loadError = result.message
       }
@@ -150,7 +123,7 @@ export const useGameStore = defineStore('game', {
       this.loadError = ''
     },
     ensureRoom(id) {
-      if (!this.data.rooms[id]) this.data.rooms[id] = { wordSearch: false, challenge: false, firstClear: false, completed: false }
+      if (!this.data.rooms[id]) this.data.rooms[id] = { cleared: false, bonusClaimed: false, plays: 0 }
       return this.data.rooms[id]
     },
 
@@ -186,17 +159,30 @@ export const useGameStore = defineStore('game', {
       this.persist()
     },
 
-    // ---------------- rounds & rewards ----------------
-    startRound(roomId, mode) {
+    // ---------------- rounds ----------------
+    /**
+     * Start a new round. The first time in a room is always Easy.
+     * mode: 'practice' (no timer) | 'challenge' (timer)
+     */
+    startRound(roomId, difficulty = 'easy', mode = 'practice') {
       if (!this.isUnlocked(roomId)) return null
+      const diff = this.canChooseDifficulty(roomId) && DIFFICULTY[difficulty] ? difficulty : 'easy'
+      const built = buildRound(roomId, diff, { previousKey: this.data.lastWords[roomId] || '' })
+      this.data.lastWords[roomId] = wordSetKey(built.words)
+      const room = this.ensureRoom(roomId)
+      room.lastDiff = diff // remembered for the next time
+      room.lastMode = mode === 'challenge' ? 'challenge' : 'practice'
       this.data.round = {
         id: `${roomId}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         roomId,
-        mode,
+        difficulty: diff,
+        mode: mode === 'challenge' ? 'challenge' : 'practice',
+        words: built.words,
+        quests: built.quests,
         fellBack: false,
         wsDone: false,
         timeBonus: false,
-        answers: [],
+        questDone: false,
         claimed: false,
         reward: null,
       }
@@ -211,51 +197,54 @@ export const useGameStore = defineStore('game', {
         this.persist()
       }
     },
-    completeWordSearch(roomId, finishedInTime) {
+    /** Retry the timer after time ran out (the time bonus is possible again). */
+    retryChallenge() {
       const r = this.data.round
-      if (!r || r.roomId !== roomId || r.wsDone) return
+      if (r && !r.wsDone) {
+        r.mode = 'challenge'
+        r.fellBack = false
+        this.persist()
+      }
+    },
+    completeWordSearch(finishedInTime) {
+      const r = this.data.round
+      if (!r || r.wsDone || r.claimed) return
       r.wsDone = true
-      r.timeBonus = r.mode === 'challenge' && !r.fellBack && finishedInTime
-      this.ensureRoom(roomId).wordSearch = true
+      r.timeBonus = r.mode === 'challenge' && !r.fellBack && !!finishedInTime
       this.persist()
     },
-    /** Make sure a Language Challenge can start (e.g. after a page refresh). */
-    ensureChallengeRound(roomId) {
+    completeQuest() {
       const r = this.data.round
-      if (r && r.roomId === roomId && r.wsDone && !r.claimed) return r
-      if (!this.roomState(roomId).wordSearch) return null
-      if (this.roomState(roomId).challenge) return null
-      // Word Search was finished before, but the round was lost: continue without time bonus.
-      this.data.round = { id: `${roomId}-${Date.now()}-r`, roomId, mode: 'practice', fellBack: true, wsDone: true, timeBonus: false, answers: [], claimed: false, reward: null }
-      this.persist()
-      return this.data.round
-    },
-    recordAnswer(index, firstTry) {
-      const r = this.data.round
-      if (!r || r.answers[index] !== undefined) return
-      r.answers[index] = firstTry
+      if (!r || !r.wsDone || r.questDone || r.claimed) return
+      r.questDone = true
       this.persist()
     },
-    /** Give the round reward ONCE. Safe to call many times. */
-    finishRound(roomId) {
+    /**
+     * Pay the round reward ONCE (safe to call many times or after a refresh).
+     * Coins, "claimed", the unlock bonus and the cleared room are saved together.
+     */
+    claimReward() {
       const r = this.data.round
-      if (!r || r.roomId !== roomId || !r.wsDone) return null
+      if (!r || !r.wsDone || !r.questDone) return null
       if (r.claimed || this.data.claimedRounds.includes(r.id)) return r.reward
-      const level = LEVEL_BY_ID[roomId]
-      const room = this.ensureRoom(roomId)
-      const reward = roundReward(level, {
-        firstClear: !room.firstClear,
-        firstTryCorrect: r.answers.filter((a) => a === true).length,
-        timeBonus: r.timeBonus,
-      })
-      // coins and the "claimed" flag are saved together in one write
+      const room = this.ensureRoom(r.roomId)
+      const wasAllCleared = this.allCleared
+      const firstClear = !room.bonusClaimed
+      const reward = roundReward(r.difficulty, { timeBonus: r.timeBonus, firstClear })
       this.data.coins += reward.total
-      room.firstClear = true
-      room.wordSearch = true
-      room.challenge = true
-      for (const w of level.words) if (!this.data.learned.includes(w.word)) this.data.learned.push(w.word)
+      room.cleared = true
+      room.bonusClaimed = true
+      room.plays = (room.plays || 0) + 1
+      for (const word of r.words) if (!this.data.learned.includes(word)) this.data.learned.push(word)
+      const i = LEVEL_BY_ID[r.roomId].level
       r.claimed = true
-      r.reward = { ...reward, roomId }
+      r.reward = {
+        ...reward,
+        roomId: r.roomId,
+        difficulty: r.difficulty,
+        unlockedRoom: firstClear && LEVELS[i] ? LEVELS[i].id : null,
+        allClearedNow: !wasAllCleared && this.allCleared,
+      }
       this.data.claimedRounds = [...this.data.claimedRounds, r.id].slice(-40)
       this.data.stats.roundsPlayed++
       this.persist()
@@ -273,12 +262,7 @@ export const useGameStore = defineStore('game', {
 
     // ---------------- shop ----------------
     buyState(itemId) {
-      return canBuy(itemId, {
-        coins: this.data.coins,
-        owned: this.data.owned,
-        isRoomUnlocked: (id) => this.isUnlocked(id),
-        isRoomCompleted: (id) => this.isCompleted(id),
-      })
+      return canBuy(itemId, { coins: this.data.coins, owned: this.data.owned, isRoomUnlocked: (id) => this.isUnlocked(id) })
     },
     buy(itemId) {
       const check = this.buyState(itemId)
@@ -293,18 +277,17 @@ export const useGameStore = defineStore('game', {
       this.persist()
       this.sound('buy')
       this.celebrate('coins')
-      this.toast(`You bought ${article(item.name)} ${item.name.toLowerCase()}!`, 'good')
+      this.toast(`You bought ${article(item.name)} ${item.name.toLowerCase()}! Find it in My House.`, 'good')
       return true
     },
 
-    // ---------------- placement ----------------
+    // ---------------- My House (free decorating) ----------------
     place(itemId, room, cell) {
       const item = ITEM_BY_ID[itemId]
       if (!item || !this.data.owned.includes(itemId)) return { ok: false, reason: 'You do not own this item.' }
       if (!this.isUnlocked(room)) return { ok: false, reason: 'This room is locked.' }
       const current = this.data.placements[itemId]
       const rot = current && !current.parent ? current.rot : 0
-      // placements without this item (so it does not block itself)
       const others = { ...this.data.placements }
       delete others[itemId]
       const res = resolveDrop(itemId, room, cell, rot, others)
@@ -335,24 +318,6 @@ export const useGameStore = defineStore('game', {
       this.persist()
       this.sound('click')
       return back
-    },
-    checkPlacement(roomId) {
-      const level = LEVEL_BY_ID[roomId]
-      const result = checkRoom(level, this.data.placements)
-      // The room quest also needs the Word Search and Language Challenge.
-      result.lessonsDone = this.roomState(roomId).challenge
-      if (!result.lessonsDone) result.passed = false
-      let newlyCompleted = false
-      let unlocked = null
-      if (result.passed && !this.isCompleted(roomId)) {
-        this.ensureRoom(roomId).completed = true
-        newlyCompleted = true
-        const next = LEVELS[level.level]
-        if (next) unlocked = next.id
-        else this.data.gameCompleted = true
-        this.persist()
-      }
-      return { ...result, newlyCompleted, unlocked }
     },
   },
 })

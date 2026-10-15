@@ -1,47 +1,42 @@
 # BUILDVERSE — Demo Script (about 2–3 minutes)
 
-**Before the demo:** open the game, go to **Settings → Reset Progress** so the house is empty, and turn the sound on. (Optional: prepare a second browser where the Bedroom is already finished, to save time.)
+**Before the demo:** open the game, go to **Settings → Reset Progress** so you start fresh, and turn the sound on. (Optional: prepare a second browser where all 5 rooms are already cleared, to show the replay features.)
 
 ---
 
 ### 0:00 – 0:20 · Introduction (Main Menu)
-> "Hello! Our game is called **BUILDVERSE — Find Words, Build Your World**. It is for beginner English learners, level A1 to A2. Players learn words about the home, then use them to build and decorate their own house."
+> "Hello! Our game is called **BUILDVERSE — Find Words, Build Your World**. It is for beginner English learners, level A1 to A2. It teaches words for things in the home and the position words **on, under, next to and between**."
 
-*Click **New Game**. Read Mia's three lines.*
-> "Mia the Builder welcomes the player: *Welcome to BUILDVERSE! This is your new home.*"
+*Point at the 🎯 LEARN banner, then click **Play**. Read Mia's lines.*
 
-### 0:20 – 0:35 · House Map
-> "This is the House Map. There are five rooms: Bedroom, Living Room, Kitchen, Bathroom and Garden. Only the Bedroom is open. The goal at the top always tells the player what to do next."
+### 0:20 – 0:35 · Choose a Room
+> "There are five rooms. Only the Bedroom is open. One round has three steps: **Find Words, Place Items, Rewards**."
 
-*Click a locked room to show the unlock condition, then click **Bedroom → Start Word Search**.*
+*Click **Bedroom**. Show that the first time is Easy, and that the timer (Practice / Challenge) is a separate choice. Click **Start**.*
 
-### 0:35 – 1:10 · Word Search
-> "First, the player reads the clue, for example *'You sleep on this.'*, and looks at the picture. Then they drag from the first letter to the last letter."
+### 0:35 – 1:15 · Step 1: Find Words
+> "The game asks for one word at a time. The player reads the clue, for example *'A tall cupboard. You hang your clothes in it.'*, looks at the picture and drags from the first letter to the last letter."
 
-*Find BED and one more word. Show the word card: picture, Thai meaning, example sentence, and the 🔊 button.*
-> "When a word is found, the game says it and shows its meaning and an example sentence. The game asks for one word at a time. If the player is stuck, **Hint** first shows the Thai meaning, then flashes the first letter, and then shows the word. Hints are free."
+*Find one word. Show the word card: picture, Thai meaning, example sentence and the 🔊 buttons. Press **Next Word**.*
+> "If the player is stuck, **Hint** first shows the Thai meaning, then the first letter flashes, then the word appears. Hints are free."
 
-*(Optional: show Challenge Mode with the timer and Pause, which hides the grid.)*
+*Find the rest (or have them ready) → **Next: Place Items**.*
 
-### 1:10 – 1:40 · Language Challenge
-> "After the word search there are three short challenges that use the new words: read and choose, put words in order, and choose a position word from a picture."
+### 1:15 – 1:55 · Step 2: Place Items
+> "Now the player must read an English instruction, for example *'Put the book on the desk.'* The book and desk were in the word search, so the two activities are connected."
 
-*Answer one wrong on purpose to show the feedback, then answer correctly.*
-> "Wrong answers get helpful feedback, not a penalty. Correct first tries give bonus coins."
+*Drop the item in a wrong space on purpose → **Check Placement**.*
+> "Wrong answers explain **why** — *ON means on top of something* — and give a free hint. After two tries, the right space glows."
 
-### 1:40 – 2:20 · Shop & My House
-*Show **Quest Complete** with the coin breakdown → **Shop**.*
-> "The reward is enough to buy the three required items: a bed, a desk and a lamp."
+*Drop it in the right space → **Check Placement** → **Get Rewards**.*
 
-*Buy them → **My House**. Drag the bed and the desk into the room. Put the lamp on the floor and press **Check Placement**.*
-> "The instruction is *'Put the lamp on the desk.'* First the game teaches the word **on** with a picture. The checklist shows what is still wrong."
+### 1:55 – 2:25 · Step 3: Rewards and replay
+> "Easy gives 50 coins, Normal 70, Hard 100. The first time a room is cleared there is a 100-coin bonus, and the next room opens. Every round picks new words and new instructions, so students can keep playing."
 
-*Move the lamp onto the desk → **Check Placement** → room complete, Living Room unlocked.*
+*Show **Play Again**, **Choose Room**, **Decorate My House**. (Optional: in the prepared browser, show Normal/Hard and 🎲 Random Room.)*
 
-### 2:20 – 2:50 · Later levels & ending
-> "The next rooms add diagonal and backwards words, harder English clues, and the words **under**, **next to** and **between**. After the Garden, the player sees their finished home, can review all 43 words, and can keep decorating with extra furniture."
-
-*(Optional: show the Review Words screen.)*
+### 2:25 – 2:50 · My House and Shop
+> "Coins buy furniture in the Shop. My House is the player's own house — they decorate it freely, and the practice quests never change it."
 
 ### 2:50 – 3:00 · Closing
 > "BUILDVERSE runs in the browser and saves progress automatically. Thank you!"

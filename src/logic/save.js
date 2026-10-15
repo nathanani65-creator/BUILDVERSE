@@ -1,10 +1,10 @@
 // ---------------------------------------------------------------------------
 // SAVE SYSTEM (localStorage)
-// The save has a version number. If the format changes, add a step to
-// `migrate` so old saves still work.
+// The save has a version number. Old saves are upgraded by `migrate`, keeping
+// coins, bought furniture, the decorated house and unlocked rooms.
 // ---------------------------------------------------------------------------
 export const SAVE_KEY = 'buildverse.save'
-export const SAVE_VERSION = 1
+export const SAVE_VERSION = 2
 
 export function defaultSettings() {
   // sound = sound effects + word voice, music = background music
@@ -15,15 +15,15 @@ export function newSaveData() {
   return {
     version: SAVE_VERSION,
     coins: 0,
-    // per room: { wordSearch, challenge, firstClear (reward claimed), completed (placement passed) }
+    // per room: { cleared, bonusClaimed, plays }
     rooms: {},
-    owned: [],
-    placements: {},
-    learned: [],
-    round: null,
+    owned: [], // furniture bought in the Shop (My House only)
+    placements: {}, // My House layout
+    learned: [], // words met in finished rounds
+    round: null, // the round being played
     claimedRounds: [],
+    lastWords: {}, // last word list per room (to avoid repeating it)
     tutorials: {},
-    gameCompleted: false,
     stats: { roundsPlayed: 0 },
   }
 }
@@ -38,14 +38,22 @@ function validate(data) {
   if (typeof data.coins !== 'number' || !Number.isFinite(data.coins) || data.coins < 0) throw new Error('bad coins')
   if (!isObject(data.rooms) || !Array.isArray(data.owned) || !isObject(data.placements)) throw new Error('bad fields')
   const base = newSaveData()
-  return { ...base, ...data, stats: { ...base.stats, ...(data.stats || {}) } }
+  return { ...base, ...data, stats: { ...base.stats, ...(data.stats || {}) }, lastWords: { ...(data.lastWords || {}) } }
 }
 
-function migrate(data) {
-  // Example for the future:
-  // if (data.version === 1) { data.newField = ...; data.version = 2 }
+/** Upgrade old saves step by step. */
+export function migrate(data) {
   if (!isObject(data) || typeof data.version !== 'number' || data.version > SAVE_VERSION) throw new Error('unknown version')
-  data.version = SAVE_VERSION
+  if (data.version === 1) {
+    // v1 had Word Search + Language Challenge + required furniture.
+    // A v1 room that was "completed" counts as cleared (its first-clear reward was already paid).
+    const rooms = {}
+    for (const [id, r] of Object.entries(data.rooms || {})) {
+      rooms[id] = { cleared: !!r.completed, bonusClaimed: !!r.completed, plays: r.completed ? 1 : 0 }
+    }
+    data = { ...data, rooms, round: null, lastWords: {}, version: 2 }
+    delete data.gameCompleted
+  }
   return data
 }
 
