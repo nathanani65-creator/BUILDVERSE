@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '../stores/game.js'
 import { LEVEL_BY_ID } from '../data/levels.js'
+import { LEVEL_GOALS } from '../data/learning.js'
 import { generateGrid, BACKWARD_DIRS } from '../logic/gridGenerator.js'
 import { checkSelection } from '../logic/selection.js'
 import WordGrid from '../components/WordGrid.vue'
@@ -18,6 +19,7 @@ if (!store.isUnlocked(roomId)) store.go('map')
 const COLORS = ['#5fb340', '#4a9fe0', '#f28c28', '#d9463e', '#9a5ac2', '#26a69a', '#e3a92b', '#f29cc4']
 const ARROWS = { E: '→', S: '↓', SE: '↘', NE: '↗', W: '←', N: '↑', NW: '↖', SW: '↙' }
 const words = level.words.map((w) => w.word)
+const goals = LEVEL_GOALS[roomId]
 
 const phase = ref('intro') // intro | playing | paused | timeup | done
 const mode = ref('practice')
@@ -103,19 +105,19 @@ function onSelect(cells) {
     lastFound.value = w
     active.value = null
     flash.value = null
-    message.value = { kind: 'good', text: `Great! You found ${w.display}.` }
+    message.value = { kind: 'good', text: `Great! You found ${w.display}. (${w.clue})` }
     store.sound('found')
     store.celebrate('stars')
     setTimeout(() => store.say(w.display), 350)
     if (found.value.length === words.length) finish()
   } else if (res.result === 'already') {
-    message.value = { kind: 'warn', text: 'You already found this word.' }
+    message.value = { kind: 'warn', text: `You already found this word (${level.words.find((x) => x.word === res.word).display}). Look for a different word.` }
     store.sound('wrong')
   } else if (res.result === 'direction') {
     message.value = { kind: 'bad', text: `Try again. In this level, words go ${level.directions.map((d) => ARROWS[d]).join(' ')} only.` }
     store.sound('wrong')
   } else {
-    message.value = { kind: 'bad', text: 'Try again. Select the letters in a straight line.' }
+    message.value = { kind: 'bad', text: 'Try again. Select the letters in a straight line. Those letters do not spell a word from the clue list.' }
     store.sound('wrong')
   }
 }
@@ -259,6 +261,15 @@ onUnmounted(() => {
 
     <!-- Start / tutorial -->
     <Modal v-if="phase === 'intro'" :title="`Level ${level.level}: ${level.name}`" wide>
+      <div class="learn paper">
+        <div class="learn-k">🎯 IN THIS LEVEL YOU WILL LEARN</div>
+        <ul>
+          <li><b>{{ words.length }} words</b> for things in the {{ level.name.toLowerCase() }}</li>
+          <li>Position word: <b>{{ goals.position }}</b> — <i>{{ goals.pattern }}</i></li>
+        </ul>
+        <div class="learn-k small">AFTER THIS LEVEL</div>
+        <ul class="cando"><li v-for="c in goals.canDo" :key="c">✔ {{ c }}</li></ul>
+      </div>
       <div v-if="level.level === 1" class="tut">
         <h3>How to find a word</h3>
         <div class="tut-row">
@@ -364,6 +375,10 @@ onUnmounted(() => {
 .clues { flex: 1; min-width: 280px; }
 .clue-title { font-family: var(--font-title); font-size: 13px; color: #fff; text-shadow: 2px 2px 0 var(--ink); }
 .clue-list { display: grid; gap: 8px; max-height: calc(100vh - 240px); overflow: auto; padding: 4px 6px 4px 2px; }
+.learn { color: var(--ink); margin-bottom: 8px; }
+.learn ul { margin: 4px 0 8px; padding-left: 20px; }
+.learn .cando { list-style: none; padding-left: 4px; }
+.learn-k { font-family: var(--font-title); font-size: 10px; color: #b5651d; }
 .tut h3, .modal h3 { font-size: 18px; margin: 12px 0 8px; color: #ffe7a3; }
 .tut ol { margin: 8px 0; padding-left: 22px; }
 .tut-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }

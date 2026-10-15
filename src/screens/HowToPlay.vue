@@ -24,6 +24,10 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
       <h1 class="screen-title">How to Play</h1>
     </div>
 
+    <button class="learn paper" @click="store.go('goals', { from: 'howto' })">
+      🎯 <b>What you learn:</b> words for things in the home + position words <b>on, under, next to, between</b>. <u>See Learning Goals ▶</u>
+    </button>
+
     <div class="steps">
       <article v-for="(s, i) in STEPS" :key="i" class="step panel-light">
         <div class="num">{{ i + 1 }}</div>
@@ -84,6 +88,7 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
 </template>
 
 <style scoped>
+.learn { display: block; width: 100%; text-align: left; font: inherit; font-size: 18px; color: var(--ink); cursor: pointer; margin-bottom: 16px; }
 .steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
 .step { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
 .num { position: absolute; left: -8px; top: -10px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-size: 14px; background: var(--gold); border: 3px solid var(--ink); }

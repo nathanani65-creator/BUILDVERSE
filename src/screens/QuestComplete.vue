@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useGameStore } from '../stores/game.js'
 import { LEVEL_BY_ID } from '../data/levels.js'
+import { LEVEL_GOALS } from '../data/learning.js'
 import PixelSprite from '../components/PixelSprite.vue'
 import CoinCounter from '../components/CoinCounter.vue'
 
@@ -28,6 +29,11 @@ const needItems = computed(() => !store.isCompleted(roomId) && store.missingRequ
         <div class="line total"><span><PixelSprite name="coin" :size="26" /> Total</span><strong>+{{ reward.total }} Coins</strong></div>
       </div>
       <div class="row center-row"><CoinCounter :coins="store.data.coins" /></div>
+
+      <div class="cando paper">
+        <div class="k">🎯 NOW YOU CAN…</div>
+        <ul><li v-for="c in LEVEL_GOALS[roomId].canDo" :key="c">✔ {{ c }}</li></ul>
+      </div>
 
       <h2 class="words-title">Words you learned</h2>
       <div class="words">
@@ -61,6 +67,9 @@ const needItems = computed(() => !store.isCompleted(roomId) && store.missingRequ
 .line.total { border: none; font-size: 22px; }
 .line.total span { display: flex; gap: 8px; align-items: center; }
 .center-row { justify-content: center; }
+.cando { color: var(--ink); }
+.cando ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; font-weight: 800; font-size: 17px; }
+.cando .k { font-family: var(--font-title); font-size: 11px; color: #b5651d; }
 .words-title { font-family: var(--font-title); font-size: 13px; }
 .words { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
 .w { display: flex; gap: 10px; align-items: center; color: var(--ink); padding: 8px; }

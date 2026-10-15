@@ -1,17 +1,21 @@
 # BUILDVERSE — Find Words, Build Your World
 
-**BUILDVERSE** is a web game for learning English. The player moves into an empty block-style house, finds hidden words, completes language challenges, earns coins, buys furniture and decorates five rooms by following English instructions.
+> 🎯 **Language focus:** BUILDVERSE teaches **vocabulary for things in the home** and the **prepositions of place _on, under, next to, between_**, for **lower-secondary students (Grade 7–9 / ม.ต้น) and adult beginners at CEFR A1–A2**.
 
-## Target players
-Beginner learners of English (CEFR **A1–A2**), e.g. Thai students who are starting English. The screens, buttons and feedback are in English, and **Thai help** can be turned on or off.
+**BUILDVERSE** is a web game for learning English. The player moves into an empty block-style house, finds hidden words, answers language challenges, earns coins, buys furniture and decorates five rooms by **following English instructions** such as *"Put the rug under the table."*
 
-## Language goals
-- Connect English words with pictures and meanings (43 home words in 5 rooms)
-- Read and spell words for things in the home
-- Understand sentences about how things are used ("You boil water in this.")
-- Put words in order to make simple sentences
-- Follow English instructions ("Put the lamp on the desk.")
-- Understand the position words **on, under, next to, between**
+## Target learners
+Lower-secondary students (Grade 7–9) and adult beginners, **CEFR A1–A2**. Screens, buttons, instructions and feedback are in English. **Thai help** can be turned on or off.
+
+## Language goals — what the game teaches
+| Skill | What the player learns | Where in the game |
+|---|---|---|
+| 📦 **Home vocabulary** (main focus) | 43 words in 5 rooms: bed, sofa, fridge, towel, fountain… | Word Search, clue cards, Review Words |
+| 📍 **Prepositions of place** (main focus) | *on, under, next to, between* — say and understand where things are | Picture questions, decorating quests |
+| 📖 **Reading & following instructions** | Understand clues ("You boil water in this.") and do instructions ("Put the mirror next to the shower.") | Clue cards, "Read and choose", decorating |
+| 🧩 **Building simple sentences** | Word order in simple present sentences: *The lamp is on the desk.* | "Make a sentence" questions |
+
+Each level has its own goal (e.g. Level 1: *"I can name 5 things in a bedroom. I can use 'on'."*), shown before the level starts and again on the Quest Complete screen. The in-game **🎯 Learning Goals** screen explains everything. Full list: `src/data/learning.js`.
 
 ## How to play / Core loop
 **Choose a room → read the clues → find the words → do 3 language challenges → get coins → buy furniture → place it by following the instruction → unlock the next room**
@@ -37,12 +41,14 @@ npm install        # install once
 npm run dev        # play at http://localhost:5173
 npm run build      # make the website in the dist/ folder
 npm run preview    # test the built website
-npm run verify     # run the automatic game checks (674 checks)
+npm run verify     # run the automatic game checks (691 checks)
 ```
 
 ## Where to change content
 | What | File |
 |---|---|
+| Learning goals, target learners, can-do statements | `src/data/learning.js` |
+| AI use & group work shown in the game (Credits) | `src/data/credits.js` |
 | Words, clues, Thai meanings, example sentences, grid size, directions, rewards, timers, language challenges, placement rules | `src/data/levels.js` |
 | Furniture, prices, required items, sizes, what can go on what | `src/data/furniture.js` |
 | Pixel art (and how to swap in real PNG images) | `src/data/sprites.js` → `IMAGE_OVERRIDES` |
@@ -52,7 +58,7 @@ npm run verify     # run the automatic game checks (674 checks)
 Code structure: `src/screens/` (game screens), `src/components/` (word grid, clue card, room view…), `src/logic/` (grid generator, word checking, coins, placement rules, saving, sound), `src/stores/game.js` (Pinia game state).
 
 ## Tools used
-Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background music and sound effects made in code), Web Speech API (pronunciation), Google Fonts (Nunito, Press Start 2P, Sarabun). All pixel art, music and sound effects are made in code — no outside image, music or sound files. Music and sound effects can be turned on/off separately (🎵 / 🔊 buttons in the bottom-right corner, or Settings).
+Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background music and sound effects made in code), Web Speech API (pronunciation), Google Fonts (Nunito, Press Start 2P, Sarabun). All pixel art, music and sound effects are made in code — no outside image, music or sound files. Music and sound effects can be turned on/off separately (🎵 / 🔊 buttons in the bottom-left corner, or Settings).
 
 ## AI tools used
 > Group: keep only what is true, and describe what **you** checked or changed.
@@ -62,7 +68,7 @@ Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background mus
 | Claude Code (Anthropic) | First version of the game code, level text (clues, example sentences, challenges) and these documents | _(fill in)_ |
 | _(add any other AI tool you really used)_ | | |
 
-No AI is called while the game is running.
+No AI is called while the game is running. The same table is shown in the game: **Credits → How we used AI** (edit `src/data/credits.js`).
 
 ## Team
-See [`docs/TEAM.md`](docs/TEAM.md). Demo script: [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Playtesting form: [`docs/PLAYTEST_LOG.md`](docs/PLAYTEST_LOG.md).
+See [`docs/TEAM.md`](docs/TEAM.md). How the game meets the assignment requirements: [`docs/REQUIREMENTS_CHECK.md`](docs/REQUIREMENTS_CHECK.md). Demo script: [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Playtesting form: [`docs/PLAYTEST_LOG.md`](docs/PLAYTEST_LOG.md).

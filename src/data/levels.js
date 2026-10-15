@@ -46,7 +46,7 @@ export const LEVELS = [
         options: [{ text: 'DESK', sprite: 'desk' }, { text: 'BED', sprite: 'bed' }, { text: 'DOOR', sprite: 'door' }],
         answer: 'BED',
         correct: 'Correct! You sleep on a bed.',
-        wrong: 'Try again. Think about night time. Where do you rest?',
+        wrong: 'Try again. Where do you rest at night?',
         hint: 'Hint: It is soft and it has a pillow.',
         explain: 'A bed is for sleeping. The answer is BED.',
       },

@@ -18,6 +18,7 @@ import Settings from './screens/Settings.vue'
 import Credits from './screens/Credits.vue'
 import Ending from './screens/Ending.vue'
 import ReviewWords from './screens/ReviewWords.vue'
+import LearningGoals from './screens/LearningGoals.vue'
 
 const store = useGameStore()
 store.init()
@@ -35,6 +36,7 @@ const SCREENS = {
   credits: Credits,
   ending: Ending,
   review: ReviewWords,
+  goals: LearningGoals,
 }
 const current = computed(() => SCREENS[store.screen] || MainMenu)
 const screenKey = computed(() => store.screen + JSON.stringify(store.params))

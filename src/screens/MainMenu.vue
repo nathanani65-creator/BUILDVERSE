@@ -4,6 +4,7 @@ import { useGameStore } from '../stores/game.js'
 import GameLogo from '../components/GameLogo.vue'
 import PixelSprite from '../components/PixelSprite.vue'
 import NpcDialog from '../components/NpcDialog.vue'
+import { LANGUAGE_FOCUS } from '../data/learning.js'
 
 const store = useGameStore()
 const intro = ref(false)
@@ -38,6 +39,11 @@ const decor = ['tree', 'flowerpot', 'bench', 'fountain']
   <main class="screen menu">
     <GameLogo class="logo" />
     <p class="subtitle">Find Words, Build Your World</p>
+    <button class="focus paper" @click="click(() => store.go('goals'))">
+      <span class="focus-k">🎯 LEARN</span>
+      <span class="focus-t">Home vocabulary · Position words: <b>on, under, next to, between</b></span>
+      <span class="focus-m">{{ LANGUAGE_FOCUS.level }} · {{ LANGUAGE_FOCUS.learners }}</span>
+    </button>
 
     <div v-if="store.loadError" class="feedback warn load-error" role="alert">
       <span class="icon">!</span>
@@ -51,6 +57,7 @@ const decor = ['tree', 'flowerpot', 'bench', 'fountain']
       <nav class="buttons panel">
         <button v-if="store.hasSave" class="btn btn-big btn-green" @click="click(() => store.go('map'))">▶ Continue</button>
         <button class="btn btn-big" :class="store.hasSave ? 'btn-wood' : 'btn-green'" @click="click(newGame)">✚ New Game</button>
+        <button class="btn btn-big btn-gold" @click="click(() => store.go('goals'))">🎯 Learning Goals</button>
         <button class="btn btn-big btn-blue" @click="click(() => store.go('howto'))">? How to Play</button>
         <button class="btn btn-big" @click="click(() => store.go('settings'))">⚙ Settings</button>
         <button class="btn btn-big" @click="click(() => store.go('credits'))">★ Credits</button>
@@ -75,7 +82,12 @@ const decor = ['tree', 'flowerpot', 'bench', 'fountain']
 
 <style scoped>
 .menu { text-align: center; padding-top: 28px; }
-.subtitle { display: inline-block; margin: 14px 0 20px; background: #2a5f9e; color: #fff; font-weight: 900; font-size: 20px; padding: 6px 18px; border: 3px solid var(--ink); box-shadow: inset 3px 3px 0 #4a9fe0, 0 4px 0 rgba(0,0,0,.3); letter-spacing: 1px; }
+.subtitle { display: inline-block; margin: 14px 0 12px; background: #2a5f9e; color: #fff; font-weight: 900; font-size: 20px; padding: 6px 18px; border: 3px solid var(--ink); box-shadow: inset 3px 3px 0 #4a9fe0, 0 4px 0 rgba(0,0,0,.3); letter-spacing: 1px; }
+.focus { display: flex; flex-direction: column; gap: 2px; align-items: center; margin: 0 auto 18px; max-width: 640px; cursor: pointer; font: inherit; color: var(--ink); transition: transform .1s; }
+.focus:hover { transform: translateY(-2px); }
+.focus-k { font-family: var(--font-title); font-size: 10px; color: #b5651d; }
+.focus-t { font-size: 19px; font-weight: 800; }
+.focus-m { font-size: 14px; color: #5b4630; }
 .load-error { max-width: 640px; margin: 0 auto 16px; text-align: left; }
 .menu-body { display: flex; align-items: center; justify-content: center; gap: 30px; }
 .buttons { display: flex; flex-direction: column; gap: 12px; padding: 22px; }

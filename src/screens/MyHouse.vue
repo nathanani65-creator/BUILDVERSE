@@ -186,6 +186,12 @@ function ruleStatus(i) {
   return checkResult.value.results[i].ok
 }
 const firstFail = computed(() => checkResult.value?.results.find((r) => !r.ok)?.rule || null)
+// Explain WHY with the meaning of the position word in the failed rule.
+const RULE_WORD = { on: 'on', under: 'under', nextTo: 'next to', between: 'between' }
+const failWhy = computed(() => {
+  const w = firstFail.value && RULE_WORD[firstFail.value.type]
+  return w ? POSITION_WORDS[w].text.split('. ')[0] + '.' : ''
+})
 
 function askCheck() {
   if (!store.data.tutorials['pos-' + tab.value]) {
@@ -337,7 +343,8 @@ onUnmounted(() => {
         <div v-else-if="checkResult && !checkResult.passed" class="feedback bad">
           <span class="icon">✖</span>
           <div>
-            <div>Not yet! “{{ ruleText(firstFail) }}” is not done.</div>
+            <div>Not yet! This part is not done: “{{ ruleText(firstFail) }}”</div>
+            <div v-if="failWhy" class="hint">Why: {{ failWhy }}</div>
             <div class="hint">Hint: {{ ruleHint(firstFail) }}</div>
           </div>
         </div>

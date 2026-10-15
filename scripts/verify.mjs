@@ -11,6 +11,7 @@ import { checkSelection } from '../src/logic/selection.js'
 import { roundReward, canBuy } from '../src/logic/economy.js'
 import { resolveDrop, checkRule, checkRoom } from '../src/logic/placement.js'
 import { loadGame, SAVE_KEY } from '../src/logic/save.js'
+import { LEVEL_GOALS, SKILLS, LANGUAGE_FOCUS } from '../src/data/learning.js'
 
 // ---- tiny fake localStorage so the store can run in Node ----
 class MemoryStorage {
@@ -69,6 +70,15 @@ for (const l of LEVELS) {
   check(`${l.id}: required items cost ${EXPECTED_REQUIRED[l.id]}`, cost === EXPECTED_REQUIRED[l.id], cost)
   check(`${l.id}: first-clear reward pays for required items`, l.reward >= cost)
   for (const t of l.placement.teach) check(`position word "${t}" lesson`, !!POSITION_WORDS[t] && !!SCENES[POSITION_WORDS[t].scene])
+}
+check('learning focus written', !!(LANGUAGE_FOCUS.headline && LANGUAGE_FOCUS.learners && LANGUAGE_FOCUS.level))
+check('4 skills listed', SKILLS.length === 4)
+for (const l of LEVELS) {
+  const g = LEVEL_GOALS[l.id]
+  check(`${l.id}: has learning goals`, !!g && g.canDo.length >= 2 && !!g.pattern)
+  check(`${l.id}: goal position word is taught`, !!POSITION_WORDS[g.position])
+  const taught = new Set([...l.placement.teach, ...l.challenges.filter((c) => c.type === 'position').map((c) => c.answer)])
+  check(`${l.id}: goal position word is practised in this level`, taught.has(g.position), g.position)
 }
 check('directions L1 = across/down', LEVELS[0].directions.join() === 'E,S')
 check('L2 adds diagonals, no backwards', LEVELS[1].directions.some((d) => d.length === 2) && !LEVELS[1].directions.some((d) => BACKWARD_DIRS.includes(d)))

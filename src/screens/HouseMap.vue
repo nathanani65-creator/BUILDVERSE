@@ -6,6 +6,10 @@ import TopBar from '../components/TopBar.vue'
 import RoomView from '../components/RoomView.vue'
 import Modal from '../components/Modal.vue'
 import PixelSprite from '../components/PixelSprite.vue'
+import { LEVEL_GOALS } from '../data/learning.js'
+
+const TOTAL_WORDS = LEVELS.reduce((n, l) => n + l.words.length, 0)
+const POSITIONS = ['on', 'under', 'next to', 'between']
 
 const store = useGameStore()
 const openRoom = ref(store.params.room || null)
@@ -38,6 +42,16 @@ function goShop() {
 function goHouse() {
   store.go('house', { room: openRoom.value })
 }
+// position words the player has practised (levels whose challenge is done)
+const learnedPositions = computed(() => {
+  const set = new Set()
+  for (const l of LEVELS) {
+    if (!store.roomState(l.id).challenge) continue
+    set.add(LEVEL_GOALS[l.id].position)
+    for (const c of l.challenges) if (c.type === 'position') set.add(c.answer)
+  }
+  return set
+})
 const prevName = computed(() => (level.value && level.value.level > 1 ? LEVELS[level.value.level - 2].name : ''))
 </script>
 
@@ -45,6 +59,21 @@ const prevName = computed(() => (level.value && level.value.level > 1 ? LEVELS[l
   <main class="screen">
     <TopBar />
     <h1 class="screen-title">House Map</h1>
+
+    <section class="skills-bar panel-light" aria-label="My English progress">
+      <strong class="sb-title">🎯 My English</strong>
+      <div class="sb-item">
+        <span>📦 Home words</span>
+        <div class="bar"><span :style="{ width: (store.data.learned.length / TOTAL_WORDS) * 100 + '%' }" /></div>
+        <b>{{ store.data.learned.length }}/{{ TOTAL_WORDS }}</b>
+      </div>
+      <div class="sb-item">
+        <span>📍 Position words</span>
+        <span v-for="p in POSITIONS" :key="p" class="chip" :class="{ ok: learnedPositions.has(p) }">{{ learnedPositions.has(p) ? '✔' : '○' }} {{ p }}</span>
+      </div>
+      <button class="btn btn-small btn-gold" @click="store.go('goals', { from: 'map' })">Learning Goals</button>
+      <button class="btn btn-small btn-blue" :disabled="!store.data.learned.length" @click="store.go('review')">Review Words</button>
+    </section>
 
     <div class="house">
       <div class="roof" aria-hidden="true"><span v-for="n in 4" :key="n" :style="{ width: 40 + n * 15 + '%' }" /></div>
@@ -121,6 +150,12 @@ const prevName = computed(() => (level.value && level.value.level > 1 ? LEVELS[l
 
 <style scoped>
 .house { max-width: 980px; margin: 0 auto; }
+.skills-bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; max-width: 980px; margin: 0 auto 16px; padding: 10px 14px; }
+.sb-title { font-size: 18px; }
+.sb-item { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 700; }
+.sb-item .bar { width: 140px; }
+.chip { font-size: 14px; font-weight: 800; padding: 2px 8px; border: 2px solid var(--ink); background: #eee; color: #666; }
+.chip.ok { background: #d9f7d9; color: #14532d; }
 .roof { display: flex; flex-direction: column; align-items: center; }
 .roof span { height: 18px; background: #8e2b25; border: 3px solid var(--ink); border-bottom: none; box-shadow: inset 3px 3px 0 #c9483f; background-image: linear-gradient(90deg, rgba(0,0,0,.18) 2px, transparent 2px); background-size: 28px 100%; }
 .rooms {
