@@ -14,6 +14,6 @@ How BUILDVERSE meets each game requirement, and where the teacher can see it in 
 ## To do for the group before submitting
 - [ ] Fill in names, student IDs and roles: `docs/TEAM.md` and in-game Credits
 - [ ] Fill in what the group did and checked: `src/data/credits.js` (`groupDid`, `GROUP_WORK`)
-- [ ] Proofread all English in `src/data/levels.js` and record it in `docs/TEAM.md`
+- [ ] Proofread all English with `docs/ENGLISH_CHECKLIST.md` (407 items) and record it in `docs/TEAM.md`
 - [ ] Playtest with real players and fill in `docs/PLAYTEST_LOG.md`
 - [ ] If your target learners are different, change them in `src/data/learning.js`

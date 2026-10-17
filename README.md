@@ -47,6 +47,7 @@ npm run dev        # play at http://localhost:5173
 npm run build      # make the website in the dist/ folder
 npm run preview    # test the built website
 npm run verify     # run the automatic game checks (1,205 checks)
+npm run checklist  # rebuild docs/ENGLISH_CHECKLIST.md (all English text, for proofreading)
 ```
 
 ## Where to change content

@@ -80,7 +80,7 @@ const rooms = ['bed', 'sofa', 'fridge', 'shower', 'tree']
         <li>Clear a room for the first time: <b>+{{ ECONOMY.unlockBonus }}</b> bonus coins and the next room opens.</li>
         <li><b>Hints are free</b>: Thai meaning → first letter flashes → the word is shown.</li>
         <li>Wrong placement? Read the instruction again and try — you never lose coins.</li>
-        <li>The Decorating Quest is practice only. Your <b>My House</b> never changes when you play.</li>
+        <li>The Decorating Quest is practice only. It never changes the house you decorate in <b>My House</b>.</li>
       </ul>
       <div class="row">
         <button class="btn btn-green btn-big" @click="store.go(store.hasSave ? 'map' : 'menu')">{{ store.hasSave ? "▶ Let's play!" : '◀ Back to Menu' }}</button>

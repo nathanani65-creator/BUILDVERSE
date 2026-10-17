@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // LEARNING GOALS — what BUILDVERSE teaches, for whom, and where in the game.
-// Shown on the "Learning Goals" screen, in each level intro and on the
-// Quest Complete screen. Edit here; no game logic needs to change.
+// Shown on the "Learning Goals" screen, and on the room cards.
+// Edit here; no game logic needs to change.
 // ---------------------------------------------------------------------------
 
 export const LANGUAGE_FOCUS = {

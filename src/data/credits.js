@@ -9,7 +9,7 @@ export const AI_USE = [
     tool: 'Claude Code (Anthropic)',
     used: [
       'Wrote the first version of the game code (Vue 3)',
-      'Drafted the word clues, example sentences and language challenges',
+      'Drafted the word clues, example sentences and placement instructions',
       'Made the pixel art and background music in code',
       'Drafted the README, demo script and playtest form',
     ],
