@@ -2,6 +2,10 @@
 
 > 🎯 **Language focus:** BUILDVERSE teaches **vocabulary for things in the home** and the **prepositions of place _on, under, next to, between_**, for **lower-secondary students (Grade 7–9 / ม.ต้น) and adult beginners at CEFR A1–A2**.
 
+| ▶ **Play the game** | 📄 **Game Document (1 page)** | 👥 **Team & Contribution** |
+|---|---|---|
+| _(paste your Netlify link here)_ | [docs/GAME_DOCUMENT.md](docs/GAME_DOCUMENT.md) | [docs/TEAM.md](docs/TEAM.md) |
+
 **BUILDVERSE** is a web game for learning English. In each round the player **finds hidden words**, then **reads an English instruction** such as *"Put the rug under the table."* and drags the item to the right place. Rounds give coins to decorate the player's own house. Five rooms open one by one, and every room can be replayed with new words.
 
 ## Target learners

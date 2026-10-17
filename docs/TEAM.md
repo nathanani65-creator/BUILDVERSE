@@ -1,14 +1,14 @@
-# BUILDVERSE — Team Members
+# BUILDVERSE — Team Members and Contribution
 
 Fill in the real information for every member. (You can also type the names in the game: **Main Menu → Credits**.)
 
-| No. | Name – Surname | Student ID | Role / Responsibilities |
-|---|---|---|---|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
+| No. | Name – Surname | Student ID | Role | What this member did in the project |
+|---|---|---|---|---|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+| 4 | | | | |
+| 5 | | | | |
 
 ### Example roles (choose and edit)
 - Project manager / presenter
@@ -22,5 +22,5 @@ Fill in the real information for every member. (You can also type the names in t
 |---|---|---|---|
 | Word list & Thai meanings | | | |
 | Clues & example sentences | | | |
-| Language challenges | | | |
-| Placement instructions | | | |
+| Placement instructions (on, under, next to, between) | | | |
+| How to Play & feedback messages | | | |
