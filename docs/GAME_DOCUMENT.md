@@ -39,3 +39,12 @@ Clearing a room opens the next one. Every round picks new words, a new grid and 
 | _(other AI tool, if used)_ | | |
 
 No AI is used while the game is running.
+
+## 7. Team members
+| No. | Name – Surname | Student ID | Role |
+|---|---|---|---|
+| 1 | ณัฐนันท์ อินสุวรรณ์ | 65241354 | Project Manager & Technical |
+| 2 | ชญานิศ ลือเรือง | 65245031 | Content & English Editor |
+| 3 | ธนภัทร ธีระพัชรรังษี | 66312268 | Game Tester & Presenter |
+
+Responsibilities: see [TEAM.md](TEAM.md).

@@ -1,21 +1,10 @@
 # BUILDVERSE — Team Members and Contribution
 
-Fill in the real information for every member. (You can also type the names in the game: **Main Menu → Credits**.)
-
-| No. | Name – Surname | Student ID | Role | What this member did in the project |
+| No. | Name – Surname | Student ID | Role | Responsibilities |
 |---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
-
-### Example roles (choose and edit)
-- Project manager / presenter
-- Programmer (Vue, game logic)
-- Content writer (words, clues, sentences — checks the English)
-- Art & UI designer (pixel art, screens)
-- Tester (playtesting, bug reports)
+| 1 | ณัฐนันท์ อินสุวรรณ์ | 65241354 | Project Manager & Technical | Looks after GitHub and Netlify, writes the Game Document, checks the English for the Bedroom and Living Room |
+| 2 | ชญานิศ ลือเรือง | 65245031 | Content & English Editor | Checks the English for the Kitchen and Bathroom, runs playtests with real players |
+| 3 | ธนภัทร ธีระพัชรรังษี | 66312268 | Game Tester & Presenter | Checks the English for the Garden and the placement instructions, tests the game on computer and phone, presents the game |
 
 ### Who checked the English content
 | Part | Checked by | Date | Notes |

@@ -4,6 +4,13 @@
 // checked, changed or made yourselves. Add any other AI tools you really used.
 // ---------------------------------------------------------------------------
 
+// Team members (shown on the Credits screen).
+export const TEAM = [
+  { name: 'ณัฐนันท์ อินสุวรรณ์', id: '65241354', role: 'Project Manager & Technical' },
+  { name: 'ชญานิศ ลือเรือง', id: '65245031', role: 'Content & English Editor' },
+  { name: 'ธนภัทร ธีระพัชรรังษี', id: '66312268', role: 'Game Tester & Presenter' },
+]
+
 export const AI_USE = [
   {
     tool: 'Claude Code (Anthropic)',

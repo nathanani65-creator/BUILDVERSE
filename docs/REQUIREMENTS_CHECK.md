@@ -12,7 +12,7 @@ How BUILDVERSE meets each game requirement, and where the teacher can see it in 
 | 6 | **Playable without a group member explaining** — How to Play in English | English How to Play (8 animated steps). First-time demos for dragging in the word grid (Easy, diagonal, backwards) and for placing items. A position-word lesson opens the first time each word is used. The current GOAL and the round steps are always shown, with one main button at each step. | Main Menu → How to Play · first round |
 
 ## To do for the group before submitting
-- [ ] Fill in names, student IDs and roles: `docs/TEAM.md` and in-game Credits
+- [x] Names, student IDs and roles: `docs/TEAM.md` and in-game Credits
 - [ ] Fill in what the group did and checked: `src/data/credits.js` (`groupDid`, `GROUP_WORK`)
 - [ ] Proofread all English with `docs/ENGLISH_CHECKLIST.md` (407 items) and record it in `docs/TEAM.md`
 - [ ] Playtest with real players and fill in `docs/PLAYTEST_LOG.md`
