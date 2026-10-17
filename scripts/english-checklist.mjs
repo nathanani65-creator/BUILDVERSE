@@ -6,7 +6,6 @@ import { fileURLToPath } from 'node:url'
 import { LEVELS, QUESTS, QUEST_THINGS, POSITION_WORDS, DIFFICULTY } from '../src/data/levels.js'
 import { LANGUAGE_FOCUS, SKILLS, LEVEL_GOALS, LEARNING_DESIGN } from '../src/data/learning.js'
 import { FURNITURE } from '../src/data/furniture.js'
-import { AI_USE, NO_AI_DURING_PLAY, TOOLS } from '../src/data/credits.js'
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const cell = (s) => String(s ?? '').replace(/\|/g, '\\|')
@@ -110,12 +109,7 @@ for (const f of files) {
   p('')
 }
 
-// ---- Part F: credits --------------------------------------------------------
-p('## Part F — Credits screen', '', 'File: `src/data/credits.js`', '', '| # | Text | OK | Fix / Notes |', '|---|---|---|---|')
-for (const a of AI_USE) for (const u of a.used) p(`| ${no()} | ${cell(a.tool)}: ${cell(u)} | ☐ | |`)
-p(`| ${no()} | ${cell(NO_AI_DURING_PLAY)} | ☐ | |`)
-for (const [t, d] of TOOLS) p(`| ${no()} | ${cell(t)} — ${cell(d)} | ☐ | |`)
-p('', '---', '', `**Total: ${n} items.** Also check the English documents: \`README.md\`, \`docs/GAME_DOCUMENT.md\`.`, '')
+p('---', '', `**Total: ${n} items.** Also check the English documents: \`README.md\`, \`docs/GAME_DOCUMENT.md\`.`, '')
 
 fs.writeFileSync(path.join(root, 'docs/ENGLISH_CHECKLIST.md'), L.join('\n'))
 console.log(`docs/ENGLISH_CHECKLIST.md written — ${n} items`)

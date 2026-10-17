@@ -15,7 +15,6 @@ import Shop from './screens/Shop.vue'
 import MyHouse from './screens/MyHouse.vue'
 import HowToPlay from './screens/HowToPlay.vue'
 import Settings from './screens/Settings.vue'
-import Credits from './screens/Credits.vue'
 import ReviewWords from './screens/ReviewWords.vue'
 import LearningGoals from './screens/LearningGoals.vue'
 
@@ -32,7 +31,6 @@ const SCREENS = {
   house: MyHouse,
   howto: HowToPlay,
   settings: Settings,
-  credits: Credits,
   review: ReviewWords,
   goals: LearningGoals,
 }

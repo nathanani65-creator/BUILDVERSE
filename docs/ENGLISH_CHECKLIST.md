@@ -241,358 +241,323 @@ File: `src/data/furniture.js`
 
 Each table shows the file to edit. Short labels and buttons are included too.
 
-### `src/screens/Credits.vue`
-
-| # | Text | OK | Fix / Notes |
-|---|---|---|---|
-| 169 | ◀ Back to Menu | ☐ | |
-| 170 | Student ID | ☐ | |
-| 171 | 🤖 How we used AI | ☐ | |
-| 172 | AI helped with: | ☐ | |
-| 173 | Our group checked / changed: | ☐ | |
-| 174 | (Group: fill in src/data/credits.js) | ☐ | |
-| 175 | Made by our group (no AI) | ☐ | |
-| 176 | All pixel art (furniture, words, helper character, coins) is drawn in code in src/data/sprites.js. No outside image files are used. | ☐ | |
-| 177 | The background music (“Block Party”) and the sound effects are made in code with the Web Audio API (src/logic/audio.js). No outside music or sound files are used. | ☐ | |
-| 178 | Word pronunciation uses the voice that comes with your browser or device. | ☐ | |
-
 ### `src/screens/DecorQuest.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 179 | 📘 What does “___” mean? | ☐ | |
-| 180 | Drag this: | ☐ | |
-| 181 | ✔ ___ placed — drag it again to move it. | ☐ | |
-| 182 | ✔ Check Placement | ☐ | |
-| 183 | Read the instruction, e.g. “Put the lamp on the desk.” | ☐ | |
-| 184 | Drag the item to a dashed space. It snaps into place. (Or tap the item, then tap a space.) | ☐ | |
-| 185 | Press ✔ Check Placement. Wrong? Read again and try — no coins are lost. | ☐ | |
-| 186 | This is a practice scene. It does not change My House. | ☐ | |
-| 187 | Got it! ▶ | ☐ | |
-| 188 | Got it! | ☐ | |
-| 189 | How to place items | ☐ | |
-| 190 | Now tap a dashed space. | ☐ | |
-| 191 | Drop it in a dashed space. | ☐ | |
-| 192 | Put the lamp on the desk. | ☐ | |
-| 193 | The lamp is on the desk. | ☐ | |
-| 194 | Not yet. Read again: “___” | ☐ | |
-| 195 | The right space is glowing. | ☐ | |
-| 196 | Leave this round? | ☐ | |
-| 197 | Your found words are saved. You can come back and place the items later. | ☐ | |
-| 198 | Get Rewards ▶ | ☐ | |
-| 199 | Next Instruction ▶ | ☐ | |
+| 169 | 📘 What does “___” mean? | ☐ | |
+| 170 | Drag this: | ☐ | |
+| 171 | ✔ ___ placed — drag it again to move it. | ☐ | |
+| 172 | ✔ Check Placement | ☐ | |
+| 173 | Read the instruction, e.g. “Put the lamp on the desk.” | ☐ | |
+| 174 | Drag the item to a dashed space. It snaps into place. (Or tap the item, then tap a space.) | ☐ | |
+| 175 | Press ✔ Check Placement. Wrong? Read again and try — no coins are lost. | ☐ | |
+| 176 | This is a practice scene. It does not change My House. | ☐ | |
+| 177 | Got it! ▶ | ☐ | |
+| 178 | Got it! | ☐ | |
+| 179 | How to place items | ☐ | |
+| 180 | Now tap a dashed space. | ☐ | |
+| 181 | Drop it in a dashed space. | ☐ | |
+| 182 | Put the lamp on the desk. | ☐ | |
+| 183 | The lamp is on the desk. | ☐ | |
+| 184 | Not yet. Read again: “___” | ☐ | |
+| 185 | The right space is glowing. | ☐ | |
+| 186 | Leave this round? | ☐ | |
+| 187 | Your found words are saved. You can come back and place the items later. | ☐ | |
+| 188 | Get Rewards ▶ | ☐ | |
+| 189 | Next Instruction ▶ | ☐ | |
 
 ### `src/screens/HouseMap.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 200 | Choose a Room | ☐ | |
-| 201 | 🎲 Random Room | ☐ | |
-| 202 | ⏸ Round in progress: ___ · ___ — next: ___ | ☐ | |
-| 203 | 🎯 My English | ☐ | |
-| 204 | 📦 Words met | ☐ | |
-| 205 | 📍 Position words ___ ___ | ☐ | |
-| 206 | Review Words | ☐ | |
-| 207 | Position word: ___ · 15 words in this room — each round picks new ones. | ☐ | |
-| 208 | 🔒 First time in this room: Easy. Clear it once to open Normal and Hard. | ☐ | |
-| 209 | 🌱 Practice No timer. | ☐ | |
-| 210 | ⏱ Challenge ___ minutes for the words. In time: +20 🪙 | ☐ | |
-| 211 | Starting a new round ends your unfinished round. | ☐ | |
-| 212 | How to unlock: clear the ___ once (Find Words + Place Items). | ☐ | |
-| 213 | Some words in this room: | ☐ | |
-| 214 | My English progress | ☐ | |
-| 215 | next to | ☐ | |
-| 216 | Random room: ___! | ☐ | |
-| 217 | 2. Place Items | ☐ | |
-| 218 | 1. Find Words | ☐ | |
+| 190 | Choose a Room | ☐ | |
+| 191 | 🎲 Random Room | ☐ | |
+| 192 | ⏸ Round in progress: ___ · ___ — next: ___ | ☐ | |
+| 193 | 🎯 My English | ☐ | |
+| 194 | 📦 Words met | ☐ | |
+| 195 | 📍 Position words ___ ___ | ☐ | |
+| 196 | Review Words | ☐ | |
+| 197 | Position word: ___ · 15 words in this room — each round picks new ones. | ☐ | |
+| 198 | 🔒 First time in this room: Easy. Clear it once to open Normal and Hard. | ☐ | |
+| 199 | 🌱 Practice No timer. | ☐ | |
+| 200 | ⏱ Challenge ___ minutes for the words. In time: +20 🪙 | ☐ | |
+| 201 | Starting a new round ends your unfinished round. | ☐ | |
+| 202 | How to unlock: clear the ___ once (Find Words + Place Items). | ☐ | |
+| 203 | Some words in this room: | ☐ | |
+| 204 | My English progress | ☐ | |
+| 205 | next to | ☐ | |
+| 206 | Random room: ___! | ☐ | |
+| 207 | 2. Place Items | ☐ | |
+| 208 | 1. Find Words | ☐ | |
 
 ### `src/screens/HowToPlay.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 219 | How to Play | ☐ | |
-| 220 | 🎯 What you learn: words for things in the home + position words on, under, next to, between. See Learning Goals ▶ | ☐ | |
-| 221 | You sleep on this. | ☐ | |
-| 222 | “Put the lamp on the desk.” | ☐ | |
-| 223 | Easy: 5 words, pictures shown, words go → ↓, 1 instruction. Normal: 7 words, diagonal words, 2 instructions. Hard: 9 words, backwards words, 3 instructions. | ☐ | |
-| 224 | The first time in a room is always Easy. After you clear it, you can choose Normal or Hard. | ☐ | |
-| 225 | Practice has no timer. Challenge has a timer: find all words in time for +___ coins. | ☐ | |
-| 226 | Clear a room for the first time: +___ bonus coins and the next room opens. | ☐ | |
-| 227 | Hints are free: Thai meaning → first letter flashes → the word is shown. | ☐ | |
-| 228 | Wrong placement? Read the instruction again and try — you never lose coins. | ☐ | |
-| 229 | The Decorating Quest is practice only. It never changes the house you decorate in My House. | ☐ | |
-| 230 | Choose a room and a level: Easy, Normal or Hard. | ☐ | |
-| 231 | Read the clue and look at the picture. | ☐ | |
-| 232 | Drag from the first letter to the last letter. | ☐ | |
-| 233 | Read the instruction. | ☐ | |
-| 234 | Drag the item to a dashed space. Press Check Placement. | ☐ | |
-| 235 | Get coins! | ☐ | |
-| 236 | Buy furniture and decorate My House. | ☐ | |
-| 237 | Clear a room to open the next one. Play again any time! | ☐ | |
-| 238 | ▶ Let's play! | ☐ | |
+| 209 | ◀ Back to Menu | ☐ | |
+| 210 | How to Play | ☐ | |
+| 211 | 🎯 What you learn: words for things in the home + position words on, under, next to, between. See Learning Goals ▶ | ☐ | |
+| 212 | You sleep on this. | ☐ | |
+| 213 | “Put the lamp on the desk.” | ☐ | |
+| 214 | Easy: 5 words, pictures shown, words go → ↓, 1 instruction. Normal: 7 words, diagonal words, 2 instructions. Hard: 9 words, backwards words, 3 instructions. | ☐ | |
+| 215 | The first time in a room is always Easy. After you clear it, you can choose Normal or Hard. | ☐ | |
+| 216 | Practice has no timer. Challenge has a timer: find all words in time for +___ coins. | ☐ | |
+| 217 | Clear a room for the first time: +___ bonus coins and the next room opens. | ☐ | |
+| 218 | Hints are free: Thai meaning → first letter flashes → the word is shown. | ☐ | |
+| 219 | Wrong placement? Read the instruction again and try — you never lose coins. | ☐ | |
+| 220 | The Decorating Quest is practice only. It never changes the house you decorate in My House. | ☐ | |
+| 221 | Choose a room and a level: Easy, Normal or Hard. | ☐ | |
+| 222 | Read the clue and look at the picture. | ☐ | |
+| 223 | Drag from the first letter to the last letter. | ☐ | |
+| 224 | Read the instruction. | ☐ | |
+| 225 | Drag the item to a dashed space. Press Check Placement. | ☐ | |
+| 226 | Get coins! | ☐ | |
+| 227 | Buy furniture and decorate My House. | ☐ | |
+| 228 | Clear a room to open the next one. Play again any time! | ☐ | |
+| 229 | ▶ Let's play! | ☐ | |
 
 ### `src/screens/LearningGoals.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 239 | Learning Goals | ☐ | |
-| 240 | ___ English skills you practise | ☐ | |
-| 241 | The 4 position words | ☐ | |
-| 242 | What you learn in each level | ☐ | |
-| 243 | Word bank (15 words) | ☐ | |
-| 244 | Position word | ☐ | |
-| 245 | Sentence pattern | ☐ | |
-| 246 | After this level… | ☐ | |
-| 247 | How the game helps you learn | ☐ | |
-| 248 | ? How to Play | ☐ | |
+| 230 | Learning Goals | ☐ | |
+| 231 | ___ English skills you practise | ☐ | |
+| 232 | The 4 position words | ☐ | |
+| 233 | What you learn in each level | ☐ | |
+| 234 | Word bank (15 words) | ☐ | |
+| 235 | Position word | ☐ | |
+| 236 | Sentence pattern | ☐ | |
+| 237 | After this level… | ☐ | |
+| 238 | How the game helps you learn | ☐ | |
+| 239 | ? How to Play | ☐ | |
 
 ### `src/screens/MainMenu.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 249 | Find Words, Build Your World | ☐ | |
-| 250 | 🎯 LEARN Home vocabulary · Position words: on, under, next to, between ___ · ___ | ☐ | |
-| 251 | ▶ Play Continue · ___/5 rooms | ☐ | |
-| 252 | 🛋 My House | ☐ | |
-| 253 | 🎯 Learning Goals | ☐ | |
-| 254 | ✚ New Game | ☐ | |
-| 255 | Let's build! ▶ | ☐ | |
-| 256 | Welcome to BUILDVERSE! | ☐ | |
-| 257 | This is your new home. | ☐ | |
-| 258 | Find words, then follow English instructions to place things in each room. | ☐ | |
-| 259 | Earn coins and decorate your own house! | ☐ | |
-| 260 | Start a new game? | ☐ | |
-| 261 | This will delete your saved house, coins and progress. Are you sure? | ☐ | |
-| 262 | Yes, start again | ☐ | |
+| 240 | Find Words, Build Your World | ☐ | |
+| 241 | 🎯 LEARN Home vocabulary · Position words: on, under, next to, between ___ · ___ | ☐ | |
+| 242 | ▶ Play Continue · ___/5 rooms | ☐ | |
+| 243 | 🛋 My House | ☐ | |
+| 244 | 🎯 Learning Goals | ☐ | |
+| 245 | ✚ New Game | ☐ | |
+| 246 | Let's build! ▶ | ☐ | |
+| 247 | Welcome to BUILDVERSE! | ☐ | |
+| 248 | This is your new home. | ☐ | |
+| 249 | Find words, then follow English instructions to place things in each room. | ☐ | |
+| 250 | Earn coins and decorate your own house! | ☐ | |
+| 251 | Start a new game? | ☐ | |
+| 252 | This will delete your saved house, coins and progress. Are you sure? | ☐ | |
+| 253 | Yes, start again | ☐ | |
 
 ### `src/screens/MyHouse.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 263 | ___ ___ on the ___ | ☐ | |
-| 264 | Tap a square in the room to place the ___, or drag it. | ☐ | |
-| 265 | Drag items into the room. Click an item to see its name, move, rotate or store it. | ☐ | |
-| 266 | Tap the square where you want to move it. | ☐ | |
-| 267 | Everything you own is in the room. 👍 You have no furniture for this room yet. | ☐ | |
-| 268 | My House | ☐ | |
-| 269 | This is your home. Decorate it any way you like! | ☐ | |
-| 270 | Drag furniture from the inventory into the room, or tap it and then tap a square. | ☐ | |
-| 271 | Click a piece of furniture to move, rotate or store it. | ☐ | |
-| 272 | Small things (lamp, kettle, cup, towel) can go on a desk, cabinet or shower. | ☐ | |
-| 273 | Get more furniture in the 🛒 Shop. Earn coins by playing rounds. | ☐ | |
-| 274 | Playing a Decorating Quest never changes your house. | ☐ | |
-| 275 | ▶ Play a round | ☐ | |
-| 276 | Drop it inside the room. | ☐ | |
-| 277 | Now tap a square in the room to place the ___. | ☐ | |
-| 278 | This room is locked. | ☐ | |
-| 279 | ___ went back to your inventory. | ☐ | |
-| 280 | The ___ is locked. Clear the ___ once to open it. | ☐ | |
-| 281 | Decorate your house! Drag furniture from your inventory. | ☐ | |
+| 254 | ___ ___ on the ___ | ☐ | |
+| 255 | Tap a square in the room to place the ___, or drag it. | ☐ | |
+| 256 | Drag items into the room. Click an item to see its name, move, rotate or store it. | ☐ | |
+| 257 | Tap the square where you want to move it. | ☐ | |
+| 258 | Everything you own is in the room. 👍 You have no furniture for this room yet. | ☐ | |
+| 259 | My House | ☐ | |
+| 260 | This is your home. Decorate it any way you like! | ☐ | |
+| 261 | Drag furniture from the inventory into the room, or tap it and then tap a square. | ☐ | |
+| 262 | Click a piece of furniture to move, rotate or store it. | ☐ | |
+| 263 | Small things (lamp, kettle, cup, towel) can go on a desk, cabinet or shower. | ☐ | |
+| 264 | Get more furniture in the 🛒 Shop. Earn coins by playing rounds. | ☐ | |
+| 265 | Playing a Decorating Quest never changes your house. | ☐ | |
+| 266 | ▶ Play a round | ☐ | |
+| 267 | Drop it inside the room. | ☐ | |
+| 268 | Now tap a square in the room to place the ___. | ☐ | |
+| 269 | This room is locked. | ☐ | |
+| 270 | ___ went back to your inventory. | ☐ | |
+| 271 | The ___ is locked. Clear the ___ once to open it. | ☐ | |
+| 272 | Decorate your house! Drag furniture from your inventory. | ☐ | |
 
 ### `src/screens/ReviewWords.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 282 | ℹFinish a round to see its words here. | ☐ | |
-| 283 | Listen to the example sentence | ☐ | |
+| 273 | ℹFinish a round to see its words here. | ☐ | |
+| 274 | Listen to the example sentence | ☐ | |
 
 ### `src/screens/RoundReward.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 284 | Congratulations! You completed your BUILDVERSE home! | ☐ | |
-| 285 | All 5 rooms are open. Play any room again for more coins, try Hard mode, or use 🎲 Random Room. | ☐ | |
-| 286 | Challenge Mode time bonus+___ | ☐ | |
-| 287 | First clear of this room (once)+___ | ☐ | |
-| 288 | 🔓New room unlocked: ___! | ☐ | |
-| 289 | Tip: Normal gives ___ coins, Hard gives ___. Challenge Mode adds +___. | ☐ | |
-| 290 | Words in this round | ☐ | |
-| 291 | ↻ Play Again (___) | ☐ | |
-| 292 | 🏠 Choose Room | ☐ | |
-| 293 | 🛋 Decorate My House | ☐ | |
-| 294 | Mia the Builder | ☐ | |
+| 275 | Congratulations! You completed your BUILDVERSE home! | ☐ | |
+| 276 | All 5 rooms are open. Play any room again for more coins, try Hard mode, or use 🎲 Random Room. | ☐ | |
+| 277 | Challenge Mode time bonus+___ | ☐ | |
+| 278 | First clear of this room (once)+___ | ☐ | |
+| 279 | 🔓New room unlocked: ___! | ☐ | |
+| 280 | Tip: Normal gives ___ coins, Hard gives ___. Challenge Mode adds +___. | ☐ | |
+| 281 | Words in this round | ☐ | |
+| 282 | ↻ Play Again (___) | ☐ | |
+| 283 | 🏠 Choose Room | ☐ | |
+| 284 | 🛋 Decorate My House | ☐ | |
+| 285 | Mia the Builder | ☐ | |
 
 ### `src/screens/Settings.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 295 | Happy background music. | ☐ | |
-| 296 | Music volume: ___% | ☐ | |
-| 297 | Effects (found word, buy, success…) and word pronunciation. | ☐ | |
-| 298 | Effects volume: ___% | ☐ | |
-| 299 | Thai help (ภาษาไทย) | ☐ | |
-| 300 | Show Thai meanings and help text. | ☐ | |
-| 301 | Test pronunciation | ☐ | |
-| 302 | Uses your browser's voice (Web Speech API). | ☐ | |
-| 303 | Reset Progress | ☐ | |
-| 304 | Delete your saved game and start again. | ☐ | |
-| 305 | Music volume | ☐ | |
-| 306 | Sound effects volume | ☐ | |
-| 307 | Reset progress? | ☐ | |
-| 308 | All coins, furniture, rooms and learned words will be deleted. This cannot be undone. | ☐ | |
-| 309 | Yes, reset | ☐ | |
-| 310 | Progress was reset. | ☐ | |
+| 286 | Happy background music. | ☐ | |
+| 287 | Music volume: ___% | ☐ | |
+| 288 | Effects (found word, buy, success…) and word pronunciation. | ☐ | |
+| 289 | Effects volume: ___% | ☐ | |
+| 290 | Thai help (ภาษาไทย) | ☐ | |
+| 291 | Show Thai meanings and help text. | ☐ | |
+| 292 | Test pronunciation | ☐ | |
+| 293 | Uses your browser's voice (Web Speech API). | ☐ | |
+| 294 | Reset Progress | ☐ | |
+| 295 | Delete your saved game and start again. | ☐ | |
+| 296 | Music volume | ☐ | |
+| 297 | Sound effects volume | ☐ | |
+| 298 | Reset progress? | ☐ | |
+| 299 | All coins, furniture, rooms and learned words will be deleted. This cannot be undone. | ☐ | |
+| 300 | Yes, reset | ☐ | |
+| 301 | Progress was reset. | ☐ | |
 
 ### `src/screens/Shop.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 311 | 🔒Preview: clear the ___ to unlock the ___ and buy these. | ☐ | |
-| 312 | ℹBuy furniture for My House. You own ___ of ___ here. Earn coins by playing rounds — you never need to buy anything to play. | ☐ | |
-| 313 | Buy furniture to decorate your house (optional). | ☐ | |
+| 302 | 🔒Preview: clear the ___ to unlock the ___ and buy these. | ☐ | |
+| 303 | ℹBuy furniture for My House. You own ___ of ___ here. Earn coins by playing rounds — you never need to buy anything to play. | ☐ | |
+| 304 | Buy furniture to decorate your house (optional). | ☐ | |
 
 ### `src/screens/WordSearch.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 314 | Words Found: ___/___ | ☐ | |
-| 315 | 💡 Thai: ___ · Look at the flashing letter! | ☐ | |
-| 316 | ___: words go ___ · Drag from the first letter to the last letter. | ☐ | |
-| 317 | The grid is hidden while the game is paused. | ☐ | |
-| 318 | How to find a word | ☐ | |
-| 319 | Find the hidden word in the grid. | ☐ | |
-| 320 | Stuck? Press 💡 Hint (___). | ☐ | |
-| 321 | In Easy mode, words go across → or down ↓. | ☐ | |
-| 322 | Normal: diagonal words ↘ ↗ | ☐ | |
-| 323 | Words can go across, down, or diagonally. RUG goes ↘. Always read from left to right. | ☐ | |
-| 324 | Pictures are hidden. Press 🖼 Show picture if you need help. | ☐ | |
-| 325 | Hard: backwards words ← ↑ | ☐ | |
-| 326 | Some words are written backwards. Here, SINK looks like K N I S. Start at the first letter S and drag to K (←). | ☐ | |
-| 327 | Read the English clue carefully. Pictures are hidden — press 🖼 Show picture if you need help. | ☐ | |
-| 328 | You found ___ of ___ words. Don't worry — your house and coins are safe. | ☐ | |
-| 329 | 🌱 Continue in Practice Mode | ☐ | |
-| 330 | ⏱ You finished in time! +20 coins at the end of the round. | ☐ | |
-| 331 | Next: read the instructions and put the items in the right place. | ☐ | |
-| 332 | Next: Place Items ▶ | ☐ | |
-| 333 | Time's up! | ☐ | |
-| 334 | Great job! All words found! | ☐ | |
-| 335 | Next Word | ☐ | |
-| 336 | Show All Clues | ☐ | |
-| 337 | Show picture | ☐ | |
-| 338 | Thai meaning | ☐ | |
-| 339 | Flash the first letter | ☐ | |
-| 340 | Show the word | ☐ | |
-| 341 | Flash the first letter again | ☐ | |
-| 342 | Great! You found ___. | ☐ | |
-| 343 | Great! You found ___ too. It counts! | ☐ | |
-| 344 | You already found ___. Look for a different word. | ☐ | |
-| 345 | Try again. In ___ mode, words go ___ only. | ☐ | |
-| 346 | Try again. Select the letters in a straight line. Those letters do not spell a word in this round. | ☐ | |
-| 347 | You need ___ coins for a hint. | ☐ | |
-| 348 | Practice Mode: no timer. Take your time! (No time bonus this round.) | ☐ | |
-| 349 | The words you found will not be saved. You can start again any time. | ☐ | |
-| 350 | 🎉 See Results | ☐ | |
-| 351 | Next Word ▶ | ☐ | |
-| 352 | Hide All Clues | ☐ | |
-| 353 | Show All Clues (___) | ☐ | |
-| 354 | ⏱ Challenge Mode: ___ minutes. Finish in time for +20 coins! | ☐ | |
-| 355 | 🌱 Practice Mode: no timer. | ☐ | |
+| 305 | Words Found: ___/___ | ☐ | |
+| 306 | 💡 Thai: ___ · Look at the flashing letter! | ☐ | |
+| 307 | ___: words go ___ · Drag from the first letter to the last letter. | ☐ | |
+| 308 | The grid is hidden while the game is paused. | ☐ | |
+| 309 | How to find a word | ☐ | |
+| 310 | Find the hidden word in the grid. | ☐ | |
+| 311 | Stuck? Press 💡 Hint (___). | ☐ | |
+| 312 | In Easy mode, words go across → or down ↓. | ☐ | |
+| 313 | Normal: diagonal words ↘ ↗ | ☐ | |
+| 314 | Words can go across, down, or diagonally. RUG goes ↘. Always read from left to right. | ☐ | |
+| 315 | Pictures are hidden. Press 🖼 Show picture if you need help. | ☐ | |
+| 316 | Hard: backwards words ← ↑ | ☐ | |
+| 317 | Some words are written backwards. Here, SINK looks like K N I S. Start at the first letter S and drag to K (←). | ☐ | |
+| 318 | Read the English clue carefully. Pictures are hidden — press 🖼 Show picture if you need help. | ☐ | |
+| 319 | You found ___ of ___ words. Don't worry — your house and coins are safe. | ☐ | |
+| 320 | 🌱 Continue in Practice Mode | ☐ | |
+| 321 | ⏱ You finished in time! +20 coins at the end of the round. | ☐ | |
+| 322 | Next: read the instructions and put the items in the right place. | ☐ | |
+| 323 | Next: Place Items ▶ | ☐ | |
+| 324 | Time's up! | ☐ | |
+| 325 | Great job! All words found! | ☐ | |
+| 326 | Next Word | ☐ | |
+| 327 | Show All Clues | ☐ | |
+| 328 | Show picture | ☐ | |
+| 329 | Thai meaning | ☐ | |
+| 330 | Flash the first letter | ☐ | |
+| 331 | Show the word | ☐ | |
+| 332 | Flash the first letter again | ☐ | |
+| 333 | Great! You found ___. | ☐ | |
+| 334 | Great! You found ___ too. It counts! | ☐ | |
+| 335 | You already found ___. Look for a different word. | ☐ | |
+| 336 | Try again. In ___ mode, words go ___ only. | ☐ | |
+| 337 | Try again. Select the letters in a straight line. Those letters do not spell a word in this round. | ☐ | |
+| 338 | You need ___ coins for a hint. | ☐ | |
+| 339 | Practice Mode: no timer. Take your time! (No time bonus this round.) | ☐ | |
+| 340 | The words you found will not be saved. You can start again any time. | ☐ | |
+| 341 | 🎉 See Results | ☐ | |
+| 342 | Next Word ▶ | ☐ | |
+| 343 | Hide All Clues | ☐ | |
+| 344 | Show All Clues (___) | ☐ | |
+| 345 | ⏱ Challenge Mode: ___ minutes. Finish in time for +20 coins! | ☐ | |
+| 346 | 🌱 Practice Mode: no timer. | ☐ | |
 
 ### `src/components/ClueCard.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 356 | ✓ Found ▶ Current word Not found ___ letters | ☐ | |
-| 357 | All Clues | ☐ | |
+| 347 | ✓ Found ▶ Current word Not found ___ letters | ☐ | |
+| 348 | All Clues | ☐ | |
 
 ### `src/components/NpcDialog.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 358 | Let's go! | ☐ | |
+| 349 | Let's go! | ☐ | |
 
 ### `src/components/RoundSteps.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 359 | Round steps | ☐ | |
-| 360 | 1. Find Words → 2. Place Items → 3. Rewards | ☐ | |
-| 361 | Find Words | ☐ | |
-| 362 | Place Items | ☐ | |
+| 350 | Round steps | ☐ | |
+| 351 | 1. Find Words → 2. Place Items → 3. Rewards | ☐ | |
+| 352 | Find Words | ☐ | |
+| 353 | Place Items | ☐ | |
 
 ### `src/components/SoundToggles.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 363 | ___ Sound effects ___ | ☐ | |
+| 354 | ___ Sound effects ___ | ☐ | |
 
 ### `src/components/WordGrid.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 364 | Word search letters | ☐ | |
+| 355 | Word search letters | ☐ | |
 
 ### `src/components/WordStrip.vue`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 365 | Words in this level | ☐ | |
+| 356 | Words in this level | ☐ | |
 
 ### `src/logic/quest.js`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 366 | Find the ___. Put the ___ in the dashed space on top of it. | ☐ | |
-| 367 | Find the ___. Put the ___ in the dashed space below it. | ☐ | |
-| 368 | Find the ___. Put the ___ in an empty space right beside it. | ☐ | |
-| 369 | Find the ___ and the ___. Put the ___ in the space in the middle of them. | ☐ | |
+| 357 | Find the ___. Put the ___ in the dashed space on top of it. | ☐ | |
+| 358 | Find the ___. Put the ___ in the dashed space below it. | ☐ | |
+| 359 | Find the ___. Put the ___ in an empty space right beside it. | ☐ | |
+| 360 | Find the ___ and the ___. Put the ___ in the space in the middle of them. | ☐ | |
 
 ### `src/logic/economy.js`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 370 | Unknown item. | ☐ | |
-| 371 | You already have this. | ☐ | |
-| 372 | Unlock this room to buy it. | ☐ | |
-| 373 | You need ___ more coins. | ☐ | |
+| 361 | Unknown item. | ☐ | |
+| 362 | You already have this. | ☐ | |
+| 363 | Unlock this room to buy it. | ☐ | |
+| 364 | You need ___ more coins. | ☐ | |
 
 ### `src/logic/placement.js`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 374 | The ___ belongs in another room. | ☐ | |
-| 375 | It does not fit there. Keep it inside the room. | ☐ | |
-| 376 | That space is taken by the ___. | ☐ | |
-| 377 | You cannot put the ___ on the ___. | ☐ | |
-| 378 | There is already a ___ on the ___. | ☐ | |
+| 365 | The ___ belongs in another room. | ☐ | |
+| 366 | It does not fit there. Keep it inside the room. | ☐ | |
+| 367 | That space is taken by the ___. | ☐ | |
+| 368 | You cannot put the ___ on the ___. | ☐ | |
+| 369 | There is already a ___ on the ___. | ☐ | |
 
 ### `src/stores/game.js`
 
 | # | Text | OK | Fix / Notes |
 |---|---|---|---|
-| 379 | Place the items in the ___. | ☐ | |
-| 380 | Collect your coins! | ☐ | |
-| 381 | Play the ___ to unlock the ___. | ☐ | |
-| 382 | Play the ___ to finish your home! | ☐ | |
-| 383 | All rooms are open! Play any room for coins, or decorate your house. | ☐ | |
-| 384 | Speech is not available on this device. | ☐ | |
-| 385 | Turn on sound effects (🔊) to hear words. | ☐ | |
-| 386 | You bought ___ ___! Find it in My House. | ☐ | |
-| 387 | You do not own this item. | ☐ | |
-| 388 | This item cannot be rotated. | ☐ | |
-| 389 | There is no space to rotate it here. | ☐ | |
-
-## Part F — Credits screen
-
-File: `src/data/credits.js`
-
-| # | Text | OK | Fix / Notes |
-|---|---|---|---|
-| 390 | Claude Code (Anthropic): Wrote the first version of the game code (Vue 3) | ☐ | |
-| 391 | Claude Code (Anthropic): Drafted the word clues, example sentences and placement instructions | ☐ | |
-| 392 | Claude Code (Anthropic): Made the pixel art and background music in code | ☐ | |
-| 393 | Claude Code (Anthropic): Drafted the README, demo script and playtest form | ☐ | |
-| 394 | The game does not use AI while you play. All words, clues and sentences are saved in the game files. | ☐ | |
-| 395 | Vue 3 — User interface framework | ☐ | |
-| 396 | Vite — Development server and build tool | ☐ | |
-| 397 | Pinia — Game state management | ☐ | |
-| 398 | JavaScript + CSS — Game logic, layout and animations | ☐ | |
-| 399 | localStorage — Saving the game in the browser | ☐ | |
-| 400 | Web Audio API — Background music and sound effects (made in code, no sound files) | ☐ | |
-| 401 | Web Speech API — Word pronunciation with the voice of the browser | ☐ | |
-| 402 | Google Fonts — Nunito, Press Start 2P, Sarabun (SIL Open Font License) | ☐ | |
-| 403 | GitHub / Netlify — Code hosting and the public game link | ☐ | |
+| 370 | Place the items in the ___. | ☐ | |
+| 371 | Collect your coins! | ☐ | |
+| 372 | Play the ___ to unlock the ___. | ☐ | |
+| 373 | Play the ___ to finish your home! | ☐ | |
+| 374 | All rooms are open! Play any room for coins, or decorate your house. | ☐ | |
+| 375 | Speech is not available on this device. | ☐ | |
+| 376 | Turn on sound effects (🔊) to hear words. | ☐ | |
+| 377 | You bought ___ ___! Find it in My House. | ☐ | |
+| 378 | You do not own this item. | ☐ | |
+| 379 | This item cannot be rotated. | ☐ | |
+| 380 | There is no space to rotate it here. | ☐ | |
 
 ---
 
-**Total: 403 items.** Also check the English documents: `README.md`, `docs/GAME_DOCUMENT.md`.
+**Total: 380 items.** Also check the English documents: `README.md`, `docs/GAME_DOCUMENT.md`.

@@ -54,7 +54,6 @@ npm run checklist  # rebuild docs/ENGLISH_CHECKLIST.md (all English text, for pr
 | What | File |
 |---|---|
 | Learning goals, target learners, can-do statements | `src/data/learning.js` |
-| AI use & group work shown in the game (Credits) | `src/data/credits.js` |
 | Word banks (words, clues, Thai, example sentences) | `LEVELS` in `src/data/levels.js` |
 | Easy / Normal / Hard (words, grid, directions, coins, timer, number of instructions) | `DIFFICULTY` in `src/data/levels.js` |
 | Decorating instructions and the things in the scenes | `QUESTS` and `QUEST_THINGS` in `src/data/levels.js` |
@@ -76,7 +75,7 @@ Vue 3, Vite, Pinia, JavaScript, CSS, localStorage, Web Audio API (background mus
 | Claude Code (Anthropic) | Game code, word banks (clues, example sentences), decorating instructions, pixel art and music in code, and these documents | _(fill in)_ |
 | _(add any other AI tool you really used)_ | | |
 
-No AI is called while the game is running. The same table is shown in the game: **Credits → How we used AI** (edit `src/data/credits.js`).
+No AI is called while the game is running.
 
 ## Team
 See [`docs/TEAM.md`](docs/TEAM.md). How the game meets the assignment requirements: [`docs/REQUIREMENTS_CHECK.md`](docs/REQUIREMENTS_CHECK.md). Demo script: [`docs/DEMO_SCRIPT.md`](docs/DEMO_SCRIPT.md). Playtesting form: [`docs/PLAYTEST_LOG.md`](docs/PLAYTEST_LOG.md).

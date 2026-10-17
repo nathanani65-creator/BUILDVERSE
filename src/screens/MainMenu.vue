@@ -76,7 +76,6 @@ const decor = ['tree', 'flowerpot', 'bench', 'fountain']
         <div class="small-links">
           <button class="link" @click="click(() => store.go('settings'))">⚙ Settings</button>
           <button class="link" @click="click(() => store.go('goals'))">🎯 Learning Goals</button>
-          <button class="link" @click="click(() => store.go('credits'))">★ Credits</button>
           <button v-if="store.hasSave" class="link danger" @click="click(newGame)">✚ New Game</button>
         </div>
       </nav>
